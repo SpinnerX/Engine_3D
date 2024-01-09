@@ -1,4 +1,5 @@
 #pragma once
+#include <GameEngine/Core/core.h>
 // if we are on the Windows OS (since windows uses dll files)
 
 // We move this entry point hhere
@@ -18,9 +19,17 @@
   extern RendererEngine::Application* RendererEngine::CreateApplication();
 
   int main(int argc, char** argv){
-    RendererEngine::EngineLogger::Init(); 
+    RendererEngine::EngineLogger::Init();
+	RENDER_PROFILE_BEGIN_SESSION("Startup", "EngineProfile-Startup.json");
     auto app = RendererEngine::CreateApplication();
+	RENDER_PROFILE_END_SESSION();
+
+	RENDER_PROFILE_BEGIN_SESSION("Runtime", "EngineProfile-Runtime.json");
     app->Run();
+	RENDER_PROFILE_END_SESSION();
+
+	RENDER_PROFILE_BEGIN_SESSION("Startup", "EngineProfile-Shutdown.json");
     delete app;
+	RENDER_PROFILE_END_SESSION();
 }
 #endif

@@ -1,6 +1,6 @@
 #pragma once
 #include "GameEnginePrecompiledHeader.h"
-#include <GameEngine/core.h>
+#include <GameEngine/Core/core.h>
 #include <GameEngine/Events/Event.h>
 
 namespace RendererEngine{

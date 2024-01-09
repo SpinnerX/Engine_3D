@@ -1,5 +1,5 @@
 #pragma once
-#include <GameEngine/core.h>
+#include <GameEngine/Core/core.h>
 
 // InputPoll is going to be static
 // - Where in a sense that there is going to be only one global input kind of manager
@@ -11,8 +11,12 @@ namespace RendererEngine{
         float xpos = 0.f;
         float ypos = 0.f;
     };
+
     class RENDER_API InputPoll{
     public:
+		
+		virtual ~InputPoll() = default;
+
         // Taking in a key and checking if it has been pressed
         // creating a singletone called _instance
         // This calls the implementation for Key Pressed that is implemented in WindowsInput
@@ -47,6 +51,6 @@ namespace RendererEngine{
 
     private:
         // Essentially this is just to pass in data to these functions
-        static InputPoll* _instance;
+        static Scope<InputPoll> _instance;
     };
 };

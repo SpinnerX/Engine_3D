@@ -1,5 +1,5 @@
 #pragma once
-#include <GameEngine/InputPoll.h>
+#include <GameEngine/Core/InputPoll.h>
 
 namespace RendererEngine{
     class WindowsInput : public InputPoll{

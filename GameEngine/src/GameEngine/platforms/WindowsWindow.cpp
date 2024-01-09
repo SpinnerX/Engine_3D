@@ -1,10 +1,12 @@
+#include "Core/core.h"
+#include "platforms/OpenGL/OpenGLContext.h"
 #include <GameEngine/platforms/Windows/WindowsWindow.h>
 #include <GameEngine/Events//MouseEvent.h>
 #include <GameEngine/Events/KeyEvent.h>
 #include <GameEngine/Events/ApplicationEvent.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <GameEngine/Renderer/RendererContext.h>
+#include <GameEngine/platforms/OpenGL/OpenGLContext.h>
 
 namespace RendererEngine{
     static bool _glfwInitialized = false;
@@ -18,14 +20,20 @@ namespace RendererEngine{
     }
 
     WindowsWindow::WindowsWindow(const WindowProps& props){
+		RENDER_PROFILE_FUNCTION();
+
         init(props);
     }
 
     WindowsWindow::~WindowsWindow(){
+		RENDER_PROFILE_FUNCTION();
+
         shutdown();
     }
 
     void WindowsWindow::init(const WindowProps& props){
+		RENDER_PROFILE_FUNCTION();
+
         _data.title = props.title;
         _data.width = props.width;
         _data.height = props.height;
@@ -35,6 +43,7 @@ namespace RendererEngine{
 
         // // We should check if GLFW is initialized before proceeding
         if(!_glfwInitialized){
+			RENDER_PROFILE_SCOPE("glfwInit");
             // TODO: glfwTerminate on system shutfown
             // Have to specify these on macOS
             // to prevent 1200x800 from becoming 2400x1600
@@ -50,8 +59,12 @@ namespace RendererEngine{
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
+		
+		{
+		RENDER_PROFILE_SCOPE("glfwCreateWindow");
         _window = glfwCreateWindow((int)props.width, (int)props.height, _data.title.c_str(), nullptr, nullptr);
-        
+		}
 
         // This is where we are going to initialize the context
         // Telling the renderer context is going to be new OpenGL context (or GraphicsContext)
@@ -59,7 +72,8 @@ namespace RendererEngine{
         //      platform dependent Renderer Context like D3DContext(), then it could do that
         // - Meaning we would just need to implement Init() and SwapBuffers(), to support that platform
         //  and things would work
-        _context = new RendererContext(_window);
+        /* _context = new RendererContext(_window); */
+		_context = CreateScope<OpenGLContext>(_window);
         _context->Init();
 
         glfwSetWindowUserPointer(_window, &_data);
@@ -165,15 +179,21 @@ namespace RendererEngine{
     }
 
     void WindowsWindow::shutdown(){
+		RENDER_PROFILE_FUNCTION();
+
         glfwDestroyWindow(_window);
     }
 
     void WindowsWindow::onUpdate(){
+		RENDER_PROFILE_FUNCTION();
+
         glfwPollEvents();
         _context->swapBuffers(); // The SwapBuffers will handle renderers swap chains
     }
 
     void WindowsWindow::setVSync(bool enabled){
+		RENDER_PROFILE_FUNCTION();
+
         // we are chhecking if we'd like to enable vsync.
         if(enabled){
             glfwSwapInterval(1);
@@ -182,7 +202,7 @@ namespace RendererEngine{
             glfwSwapInterval(0);
         }
 
-        _data.vSync = true;
+        _data.vSync = enabled;
     }
 
 };

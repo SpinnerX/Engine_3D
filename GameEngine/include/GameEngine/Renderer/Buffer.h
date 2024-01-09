@@ -1,5 +1,7 @@
 #pragma once
 #include <ostream>
+#include <GameEngine/Core/core.h>
+
 namespace RendererEngine{
     // Buffer.h
     // - will represent Vertex buffer and Index buffer

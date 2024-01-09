@@ -1,9 +1,9 @@
 #pragma once
-#include <GameEngine/core.h>
+#include <GameEngine/Core/core.h>
 #include <string>
 #include <functional>
 #include <fmt/format.h>
-
+#include <sstream>
 
 namespace RendererEngine{
 
@@ -98,7 +98,7 @@ namespace RendererEngine{
 
 namespace fmt{
     template<>
-    struct fmt::formatter<RendererEngine::Event> {
+    struct formatter<RendererEngine::Event> {
         template<typename ParseContext>
         constexpr auto parse(ParseContext& ctx) { return ctx.begin(); }
 

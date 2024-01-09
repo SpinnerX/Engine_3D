@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngine/Events/Event.h>
+#include <sstream>
 
 namespace RendererEngine{
     // Basically we assign to which event which

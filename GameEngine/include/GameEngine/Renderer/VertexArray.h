@@ -22,13 +22,13 @@ namespace RendererEngine{
         virtual void bind() const = 0;
         virtual void unbind() const = 0; // NOTE: In vertex arrays there are use cases where you may want to unbind your data.
 
-        virtual void addVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) = 0;
-        virtual void setIndexBuffer(const std::shared_ptr<IndexBuffer>& vertexBuffer) = 0;
+        virtual void addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) = 0;
+        virtual void setIndexBuffer(const Ref<IndexBuffer>& vertexBuffer) = 0;
 
-        virtual const std::vector<std::shared_ptr<VertexBuffer>>& getVertexBuffer() const  = 0;
-        virtual const std::shared_ptr<IndexBuffer>& getIndexBuffer() const  = 0;
+        virtual const std::vector<Ref<VertexBuffer>>& getVertexBuffer() const  = 0;
+        virtual const Ref<IndexBuffer>& getIndexBuffer() const  = 0;
 
-        static VertexArray* Create();
+        static Ref<VertexArray> Create();
 
     };
 };

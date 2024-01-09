@@ -1,7 +1,7 @@
 #pragma once
-#include <GameEngine/core.h>
+#include <GameEngine/Core/core.h>
 #include <GameEngine/Events/Event.h>
-
+#include <GameEngine/Core/Timestep.h>
 
 namespace RendererEngine{
 
@@ -22,7 +22,7 @@ namespace RendererEngine{
         virtual void onDetach() {}
 
         // Updating the layer is updated when the application calls onUpdate
-        virtual void onUpdate(){}
+        virtual void onUpdate(Timestep ts){}
 
         virtual void onImguiRender(){}
 

@@ -1,13 +1,8 @@
 #pragma once
-#include <GameEngine/core.h>
+#include <GameEngine/Core/core.h>
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 #include <GameEngine/Events/Event.h>
-// #include <spdlog/sinks/ostream_sink.h>
-// #include <spdlog/sinks/rotating_file_sink.h>
-// #include <spdlog/sinks/stdout_color_sinks.h>
-// #include <spdlog/pattern_formatter.h>
-// using spdlog::memory_buf_t;
 
 namespace RendererEngine{
 
