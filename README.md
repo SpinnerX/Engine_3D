@@ -38,3 +38,5 @@ https://github.com/SpinnerX/Rocket-Game/assets/56617292/e679bf7d-ee27-47d9-a011-
   * GPU Particle simulation
   * Multiple Rendering Targets
   * Instance Rendering
+  * Rigid Body (Physics)
+  * Soft Body (Physics)
