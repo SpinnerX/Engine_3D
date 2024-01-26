@@ -36,10 +36,12 @@ https://github.com/SpinnerX/Rocket-Game/assets/56617292/e679bf7d-ee27-47d9-a011-
 ### List Features Added
 * 2D Batch Renderer
 * Profiler
-* Serializer/Deserializer
+* Serializer/Deserializer (YAML)
+* Native Scripting
 * Native File Dialog (Mac)
+* Entity Component System (ECS)
+* Add/Delete Entities/Components (Editor)
 * Editor Camera
-* UI Components/ECS
 
 ### TODO
   * 2D physics simulation
