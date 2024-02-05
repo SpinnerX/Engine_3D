@@ -10,6 +10,7 @@
 * Earlier in the development, added a profiler to monitor the function's runtime.
 * The editor can add/remove entities into the scene, including adding/removing components from entities.
 * Serializing/Deserializing, so users can load/save scenes using the editor.
+  * `https://github.com/SpinnerX/Game_Engine/blob/main/GameEngine/include/GameEngine/Scene/SceneSerializer.cpp` - Is where the serialization/deserialization code is located for handling loading/saving different scenes.
 
 https://github.com/SpinnerX/Game_Engine/assets/56617292/694e374d-8bfe-4e7b-9443-aaf1779295c1
 
@@ -22,8 +23,6 @@ https://github.com/SpinnerX/Rocket-Game/assets/56617292/e679bf7d-ee27-47d9-a011-
 
 ### Loading Tilemaps and Spritesheets
 ![Screenshot 2024-01-14 at 6 29 49 PM](https://github.com/SpinnerX/Game_Engine/assets/56617292/dcd2f9c1-b4e1-408b-bb18-3cb7ce9a13ef)
-
-* `https://github.com/SpinnerX/Game_Engine/blob/main/GameEngine/include/GameEngine/Scene/SceneSerializer.cpp` - Is where the serialization/deserialization code is located for handling loading/saving different scenes.
 
 # Features Added
 * 2D Batch Renderer
