@@ -1,30 +1,35 @@
-# Game Engine
+# Engine-3D
 
-### Overview
-* Developing a 3D Game Engine using OpenGL/GLFW rendering APIs
-* The goal for the engine is to make games, but hopefully, get to the point of being able to process audio and digital processing.
-* 2D/3D game development for hoping to take into game jams.
+## Overview
+* Game Engine called Engine3D.
+* Rendering-API agnostic engine that'll soon be able to support Vulkan, DirectX, and even Metal
+* Platform-agnostic engine that'll support both Windows, Linux, and Mac.
 
-### Engines Editor
-* Currently the layout of the engine editor.
-* Earlier in the development, added a profiler to monitor the function's runtime.
-* The editor can add/remove entities into the scene, including adding/removing components from entities.
-* Serializing/Deserializing, so users can load/save scenes using the editor.
-  * `https://github.com/SpinnerX/Game_Engine/blob/main/GameEngine/include/GameEngine/Scene/SceneSerializer.cpp` - Is where the serialization/deserialization code is located for handling loading/saving different scenes.
+## Engines Editor
+* Editor's current design and layout
+* User can add/remove components from entities.
+* User can attach different components to entities. (Static, Dynamic)
+* Playing/Stopping scenes
+* Native File Dialogs
+* Serializer/Deserializer for loading/saving current scenes.
+* Is where the serialization/deserialization code is located for handling loading/saving different scenes, `https://github.com/SpinnerX/Game_Engine/blob/main/GameEngine/include/GameEngine/Scene/SceneSerializer.cpp`.
 
+## UI Editor Usage
 https://github.com/SpinnerX/Game_Engine/assets/56617292/694e374d-8bfe-4e7b-9443-aaf1779295c1
 
-### Rocket Game built with this Game Engine
-* Developed a rocket game kind of similar to the one in Geometry Dash where you have a rocket that needs to avoid obstacles
-* This was simply to showcase the use of this Game Engine, that I was developing
-* This is the GitHub link to that repo for Rocket-Game `https://github.com/SpinnerX/Rocket-Game`
+## Projects Built using Engine3D
+
+### Rocket-Game
+* The game is like the mini rocket mode in Geometry Dash.
+* Using the 2D renderer built in Engine3D showcases the capabilities of the engine.
+* Link to that repo for Rocket-Game `https://github.com/SpinnerX/Rocket-Game`
 
 https://github.com/SpinnerX/Rocket-Game/assets/56617292/e679bf7d-ee27-47d9-a011-7670a557ce38
 
 ### Loading Tilemaps and Spritesheets
 ![Screenshot 2024-01-14 at 6 29 49 PM](https://github.com/SpinnerX/Game_Engine/assets/56617292/dcd2f9c1-b4e1-408b-bb18-3cb7ce9a13ef)
 
-# Features Added
+### Features Added
 * 2D Batch Renderer
 * Editor UI Layout
 * Orthographic/Perspective/Editor Camera
@@ -35,10 +40,21 @@ https://github.com/SpinnerX/Rocket-Game/assets/56617292/e679bf7d-ee27-47d9-a011-
 * Entity Component System (ECS)
 * Add/Delete Entities/Components (Editor)
 
-### Things TODO
-  * 2D physics simulation
-  * GPU Particle simulation
-  * Multiple Rendering Targets
-  * Instance Rendering
-  * Rigid Body (Physics)
-  * Soft Body (Physics)
+### TODO List
+* 2D/3D physics simulation
+* GPU Particle simulation
+* Meshes
+* Animations
+* Multiple Rendering Targets
+* Instance Rendering
+* Ray Tracing
+* Rigid Body (Physics)
+* Soft Body (Physics)
+* Mesh Fracture
+* Audio Processing
+   * Audio Synthesizer
+   * Sound VFX
+* Skeletal Animations
+   * Bones Nodes
+   * Joint Physics
+* Terrain generator
