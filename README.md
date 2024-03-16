@@ -43,14 +43,14 @@ https://github.com/SpinnerX/Rocket-Game/assets/56617292/e679bf7d-ee27-47d9-a011-
 ### TODO List
 * 2D/3D physics simulation
 * GPU Particle simulation
-* Meshes
 * Animations
+* Meshes
+   * Mesh Fracture
 * Multiple Rendering Targets
 * Instance Rendering
 * Ray Tracing
 * Rigid Body (Physics)
 * Soft Body (Physics)
-* Mesh Fracture
 * Audio Processing
    * Audio Synthesizer
    * Sound VFX
