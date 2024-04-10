@@ -1,9 +1,11 @@
 # Engine-3D
 
 ## Overview
-* Game Engine called Engine3D.
-* Rendering-API agnostic engine that'll soon be able to support Vulkan, DirectX, and even Metal
-* Platform-agnostic engine that'll support both Windows, Linux, and Mac.
+* Creating Engine3D from scratch using the raw OpenGL API, for understanding further Computer Graphics, and Rendering Architecture
+* The purpose for this engine, eventually is to be a Rendering-API agnostic engine that'll soon be able to support Vulkan, DirectX, and even Metal
+* Allowing to build creative projects through this engine. While also giving users to use this as an API as well as having an easier setup.
+* Here are the philosophies behind the codebase is to be fast, scalable, and be platform-specific.
+  * Platform-specific meaning you use what you only need.
 
 ## UI Editor
 * Engine3D's interactive built-in UI Editor
