@@ -31,5 +31,5 @@ ENDMACRO(ADD_MSVC_PRECOMPILED_HEADER)
 # Log::Log1 is the alias we made when we created an alias in the Logger CMakeLists.txt file
 target_link_libraries(
     ${PROJECT_NAME}
-    Engine::Engine
+	Engine3D
 )

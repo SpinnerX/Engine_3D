@@ -1,85 +1,75 @@
 cmake_minimum_required(VERSION 3.15)
-set(PROJECT_NAME GameEngine)
-set(CMAKE_CXX_FLAGS "-Wno-dev")
-set(CMAKE_CXX_FLAGS "-std=c++20")
 
-project(${PROJECT_NAME})
+set(PROJECT_NAME Engine3D)
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS "-Wno-dev")
-set(CMAKE_CXX_FLAGS "-fno-exceptions" "-fsanitize=address" "-Wall" "-Wextra")
-set(CMAKE_CXX_FLAGS "-std=c++20")
 
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 
-set(CMAKE_BUILT_TYPE Debug)
-set(THREADS_PREFER_PTHREAD_FLAG ON)
+project(${PROJECT_NAME} VERSION 1.0)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-include(cmake/precompiled_headers.cmake)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "") # works (in creating the compile_commands.json file)
 
-find_package(fmt REQUIRED)
-find_package(spdlog REQUIRED)
-find_package(Threads REQUIRED)
-include(cmake/imgui.cmake)
-include(cmake/glad.cmake)
+option(ENGINE_BUILD_UNIT_TESTS "Build the GameEngine unit tests" ON)
+option(ENGINE_BUILD_TESTBED "Build the GameEngine testbed" ON)
+option(ENGINE_BUILD_DOCS "Build the GameEngine documentation" OFF)
+option(ENGINE_USER_SETTINGS "Override GameEngine settings with GameEngineUserSettings.h" OFF)
 
+option(BUILD_SHARED_LIBS "Build Box2D as a shared library" OFF)
+
+include(GNUInstallDirs)
 include_directories(
-  ${PROJECT_SOURCE_DIR}/GameEngine/include
-  ${PROJECT_SOURCE_DIR}/GameEngine/include/GameEngine
-  ${imgui_include}
-  ${glad_include}
+	${PROJECT_SOURCE_DIR}/include
+	${PROJECT_SOURCE_DIR}/include/Engine3D
 )
 
-set(
-  all_src
-  GameEngine/src/GameEngine/core.cpp
-  GameEngine/include/GameEngine/Application.cpp
-  GameEngine/include/GameEngine/EngineLogger.cpp
-  GameEngine/src/GameEngine/platforms/WindowsWindow.cpp
-  GameEngine/include/GameEngine/Layer.cpp
-  GameEngine/include/GameEngine/LayerStack.cpp
-  ${imgui_src}
-  ${glad_src}
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-  GameEngine/include/GameEngine/Imgui/ImGuiLayer.cpp
-  GameEngine/include/GameEngine/InputPoll.cpp
+message("Message = ${CMAKE_INSTALL_PREFIX}")
 
-  GameEngine/src/GameEngine/platforms/WindowsInput.cpp
-  GameEngine/src/GameEngine/Renderer/RendererContext.cpp
-  GameEngine/include/GameEngine/Renderer/Shader.cpp
-  GameEngine/include/GameEngine/Renderer/Buffer.cpp
-  GameEngine/include/GameEngine/platforms/OpenGL/OpenGLBuffer.cpp
-  GameEngine/include/GameEngine/Renderer/Renderer.cpp
-  GameEngine/include/GameEngine/Renderer/VertexArray.cpp
-  GameEngine/include/GameEngine/platforms/OpenGL/OpenGLVertexArray.cpp
-  GameEngine/include/GameEngine/Renderer/RendererAPI.cpp
-  GameEngine/include/GameEngine/Renderer/RendererCommand.cpp
-  GameEngine/include/GameEngine/platforms/OpenGL/OpenGLRendererAPI.cpp
-)
-
-add_precompiled_header(${PROJECT_NAME} include/GameEnginePrecompiledHeader.h FORCEINCLUDE SOURCE_CXX src/GameEnginePrecompiledHeader.cpp)
-
-
+# add_subdirectory(Sandbox)
 add_subdirectory(Sandbox)
+add_subdirectory(src)
 
-add_library(${PROJECT_NAME} SHARED ${all_src})
-add_library(Engine::Engine ALIAS ${PROJECT_NAME}) # Allows to alias the library
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+# target_precompile_headers(${PROJECT_NAME} PUBLIC
+# 	"$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_INSTALL_PREFIX}/include/GameEngine/GameEnginePrecompiledHeader.h>"
+# )
 
-# Linking the included directories
-target_include_directories(
-  ${PROJECT_NAME}
-  PUBLIC
-  ${PROJECT_SOURCE_DIR}/GameEngine/include
-  ${PROJECT_SOURCE_DIR}/GameEngine/include/GameEngine
+set(PRECOMPILED_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/Engine3D/Engine3DPrecompiledHeader.h>")
+set(INSTALLED_PRECOMPILED_PATH "${CMAKE_INSTALL_PREFIX}/include/Engine3D/Engine3DPrecompiledHeader.h>")
+
+if(EXISTS ${INSTALLED_PRECOMPILED_PATH})
+	set(PATH ${INSTALLED_PRECOMPILED_PATH})
+elseif(EXISTS ${PRECOMPILED_PATH})
+	set(PATH ${PRECOMPILED_PATH})
+endif()
+
+
+# target_precompile_headers(${PROJECT_NAME} PUBLIC
+# 	"$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/include/Engine3D/Engine3DPrecompiledHeader.h>"
+# )
+
+if(WIN32)
+include(cmake/win32.cmake)
+elseif(UNIX)
+include(cmake/unix.cmake)
+endif()
+
+target_precompile_headers(${PROJECT_NAME} PUBLIC
+	"$<$<COMPILE_LANGUAGE:CXX>:>"
 )
 
-# This is how you can have precompiled headers
-# This allows for faster compile time
-target_precompile_headers(${PROJECT_NAME} PRIVATE
-  "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/GameEngine/include/GameEnginePrecompiledHeader.h>"
+install(
+	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Engine3D"
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-include(cmake/glm.cmake)
-include(cmake/glfw.cmake)
-target_link_libraries(${PROJECT_NAME} fmt::fmt spdlog::spdlog Threads::Threads)
+
+# Installing to /usr/local/public/GameEngine/
+# install(
+#   DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+#   DESTINATION "${CMAKE_INSTALL_LIBDIR}/GameEngine"
+# )

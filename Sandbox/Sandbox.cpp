@@ -1,4 +1,5 @@
-#include <GameEngine/GameEngine.h>
+#include <Engine3D/Engine3DPrecompiledHeader.h>
+#include <Engine3D/Core/EntryPoint.h>
 // #include <glm/glm.hpp>
 // #include <glm/vec3.hpp>  // glm::vec3
 // #include <glm/vec4.hpp>  // glm::vec4
@@ -17,31 +18,31 @@
 // }
 
 // This is just an example on how to make a layer
-class ExampleLayer : public RendererEngine::Layer{
+namespace Engine3D{
+class ExampleLayer : public Engine3D::Layer{
 public:
     ExampleLayer() : Layer("Example"){
         // auto cam = camera(5.f, {0.5f, 0.5f});
     }
 
-    void onUpdate() override {
+    void OnUpdate(Timestep ts) override {
         clientLogInfo("ExampleLayer::Update");
 
 
-        if(RendererEngine::InputPoll::isKeyPressed(RENDER_KEY_TAB)){
+        if(InputPoll::IsKeyPressed(ENGINE_KEY_TAB)){
             clientLogTrace("Tab key has been pressed!\n");
         }
     }
 
-    void onEvent(RendererEngine::Event& event) override{
-        clientLogTrace("{}", event);
-        if(event.GetEventType() == RendererEngine::EventType::KeyPressed){
-            RendererEngine::KeyPressedEvent& e = (RendererEngine::KeyPressedEvent&)event;
+    void OnEvent(Event& event) override{
+        if(InputPoll::IsKeyPressed(ENGINE_KEY_TAB)){
+            KeyPressedEvent& e = (KeyPressedEvent&)event;
             clientLogTrace("{}\n", (char)e.GetKeyCode());
         }
     }
 };
 
-class Sandbox : public RendererEngine::Application{
+class Sandbox : public Application{
 public:
     Sandbox() {
         pushLayer(new ExampleLayer());
@@ -51,6 +52,7 @@ public:
     ~Sandbox() {}
 };
 
-RendererEngine::Application* RendererEngine::CreateApplication(){
+Application* CreateApplication(ApplicationCommandLineArgs args){
     return new Sandbox();
 }
+};
