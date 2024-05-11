@@ -124,7 +124,7 @@ namespace Engine3D{
 
 		// @note offset from collider to middle of the entity.
 		glm::vec2 offset = {0.0f, 0.f};
-		glm::vec2 size = {0.0f, 0.0f};
+		glm::vec2 size = {0.5f, 0.5f};
 
 
 		void* runtimeFixture = nullptr;

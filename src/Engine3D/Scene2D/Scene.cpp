@@ -33,7 +33,50 @@ namespace Engine3D{
 		_registry.destroy(entity);
 	}
 
+	void Scene::OnRuntimeStart(){
+		coreLogWarn("Starting Physics Simulation!");
+		physicsWorld = new b2World({0.0f, -9.8f});
+
+		// Going through ECS for rigit body 2D components
+		auto view = _registry.view<RigidBody2DComponent>();
+
+		for(auto e : view){
+			// Creating our entities.
+			Entity entity = { e, this };
+			auto& transform = entity.GetComponent<TransformComponent>();
+			auto& rb2d = entity.GetComponent<RigidBody2DComponent>();
+			
+			// Defining our body
+			b2BodyDef bodyDef;
+			// Converting to different body type.
+			bodyDef.type = engineRigidBody2DTypeToBox2DType(rb2d.type);
+			bodyDef.position.Set(transform.translation.x, transform.translation.y);
+			bodyDef.angle = transform.rotation.z;
+			
+			// Creating our body
+			b2Body* body = physicsWorld->CreateBody(&bodyDef);
+			body->SetFixedRotation(rb2d.hasFixedRotation);
+			rb2d.runtimeBody = body; // @note definig that this predeffined body is going to be our runtime.
+
+			if(entity.HasComponent<BoxCollider2DComponent>()){
+				auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
+				
+				b2PolygonShape boxShape;
+				boxShape.SetAsBox(bc2d.size.x * transform.scale.x, bc2d.size.y * transform.scale.y);
+
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &boxShape;
+				fixtureDef.density = bc2d.density;
+				fixtureDef.friction = bc2d.friction;
+				fixtureDef.restitution = bc2d.restitution;
+				fixtureDef.restitutionThreshold = bc2d.restitutionThreshold;
+				body->CreateFixture(&fixtureDef);
+			}
+		}
+	}
+
 	void Scene::OnUpdateRuntime(Timestep ts){
+		// physicsWorld = new b2World({0.0f, -9.8f});
 		{
 			/*
 			 *
@@ -165,56 +208,6 @@ namespace Engine3D{
 		}
 
 		return {};
-	}
-	
-	void Scene::OnRuntimeStart(){
-		coreLogWarn("Starting Physics Simulation!");
-		// if(!physicsWorld) coreLogWarn("physicsWorld is not nullptr!");
-		// else coreLogError("_physicsWord is still nullptr!");
-
-		if(physicsWorld == nullptr){
-			coreLogWarn("Should not be nullptr == b2World");
-			physicsWorld = new b2World({0.0f, -9.8f});
-			if(physicsWorld == nullptr) coreLogWarn("Should is still nullptr == b2World");
-		}
-
-
-		// Going through ECS for rigit body 2D components
-		auto view = _registry.view<RigidBody2DComponent>();
-
-		for(auto e : view){
-			// Creating our entities.
-			Entity entity = { e, this };
-			auto& transform = entity.GetComponent<TransformComponent>();
-			auto& rb2d = entity.GetComponent<RigidBody2DComponent>();
-			
-			// Defining our body
-			b2BodyDef bodyDef;
-			// Converting to different body type.
-			bodyDef.type = engineRigidBody2DTypeToBox2DType(rb2d.type);
-			bodyDef.position.Set(transform.translation.x, transform.translation.y);
-			bodyDef.angle = transform.rotation.z;
-			
-			// Creating our body
-			b2Body* body = physicsWorld->CreateBody(&bodyDef);
-			body->SetFixedRotation(rb2d.hasFixedRotation);
-			rb2d.runtimeBody = body; // @note definig that this predeffined body is going to be our runtime.
-
-			if(entity.HasComponent<BoxCollider2DComponent>()){
-				auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
-				
-				b2PolygonShape boxShape;
-				boxShape.SetAsBox(bc2d.size.x * transform.scale.x, bc2d.size.y * transform.scale.y);
-
-				b2FixtureDef fixtureDef;
-				fixtureDef.shape = &boxShape;
-				fixtureDef.density = bc2d.density;
-				fixtureDef.friction = bc2d.friction;
-				fixtureDef.restitution = bc2d.restitution;
-				fixtureDef.restitutionThreshold = bc2d.restitutionThreshold;
-				body->CreateFixture(&fixtureDef);
-			}
-		}
 	}
 
 	void Scene::OnRuntimeStop(){

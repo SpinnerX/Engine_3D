@@ -88,6 +88,7 @@
 #include <box2d/b2_body.h>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_polygon_shape.h>
+#include <yaml-cpp/yaml.h>
 
 // #include <glm/glm.hpp>
 // #include <Engine3D/Event/ApplicationEvent.h>
