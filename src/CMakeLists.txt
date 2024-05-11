@@ -56,6 +56,7 @@ set(
   Engine3D/Renderer2D/EditorCamera.cpp
   Engine3D/Graphics/UniformBuffer.cpp
   Engine3D/OpenGL/OpenGLUniformBuffer.cpp
+  Engine3D/Core/UUID.cpp
 
 )
 
@@ -133,6 +134,7 @@ set(
   ../${INCLUDE_DIR}/Image/stb_image.h
 
   ../${INCLUDE_DIR}/Renderer3D/Renderer3D.h
+  ../${INCLUDE_DIR}/Core/UUID.h
 )
 
 

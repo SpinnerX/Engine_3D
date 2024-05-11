@@ -1,6 +1,6 @@
 #pragma once
 #include <Engine3D/Scene2D/Scene.h>
-#include <Engine3D/Core/EngineLogger.h>
+#include <Engine3D/Scene2D/Components.h>
 #include <Engine3D/Entt/entt.h>
 
 namespace Engine3D{
@@ -63,6 +63,8 @@ namespace Engine3D{
 		bool operator==(const Entity& other) const { return entityHandler == other.entityHandler and scene == other.scene; }
 		
 		bool operator!=(const Entity& other) const { return !(*this == other); }
+
+		UUID GetUUID() { return GetComponent<EntityIDComponent>().id; }
 
 	private:
 		entt::entity entityHandler{entt::null};

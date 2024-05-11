@@ -1,14 +1,22 @@
 #pragma once
 #include <Engine3D/Core/core.h>
-// #include <Engine3D/Renderer2D/OrthographicCamera.h>
 #include <Engine3D/Scene2D/SceneCamera.h>
-#include <Engine3D/Scene2D/ScriptableEntity.h>
-// #include <glm/gtc/matrix_transform.hpp>
-
-// #define GLM_ENABLE_EXPERIEMENTAL
-// #include <glm/gtx/quaternion.hpp>
+#include <Engine3D/Graphics/Texture.h>
+#include <Engine3D/Core/UUID.h>
+#include <string>
 
 namespace Engine3D{
+
+	//! @note TODO --- Find a better way at storing UUID's for Entities
+	//! @note For now we treat this UUID's for entities as a component
+	struct EntityIDComponent{
+		UUID id;
+
+		EntityIDComponent() = default;
+		EntityIDComponent(const UUID& uid) : id(uid) {}
+		EntityIDComponent(const EntityIDComponent&) = default;
+	
+	};
 	
 	struct TagComponent{
 		std::string tag;
@@ -70,6 +78,8 @@ namespace Engine3D{
 		CameraComponent(const CameraComponent&) = default;
 	};
 
+	//! @note Forward Declaration
+	class ScriptableEntity;
 	struct NativeScriptComponent{
 		ScriptableEntity* instance = nullptr;
 		

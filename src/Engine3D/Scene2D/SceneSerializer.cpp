@@ -7,9 +7,7 @@ namespace YAML{
 	 *
 	 * @param convert<> is specialized template for custom type for glm::vec3
 	 * @note convert<> will encode and decode to serialize to glm vec's, through template specialization
-	 * @param encode will encode glm::vec2
-	 * @param decode will decode glm::vec3
-	 * */
+	*/
 
 	template<>
 	struct convert<glm::vec2>{
@@ -83,13 +81,7 @@ namespace YAML{
 namespace Engine3D{
 
 	/*
-	 *
 	 * @note outputting format.
-	 vec3 = [1, 2, 3]
-	 vec4 = [1, 2, 3, 4]
-	 *
-	 *
-	 *
 	 * */
 	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& v){
 		out << YAML::Flow;
@@ -132,7 +124,6 @@ namespace Engine3D{
 	
 	/*
 	 *
-	 *
 	 * @param key - represents what is it we are serializing, such as the name specifier.
 	 * @param value - is the actual value of the type we are serializing.
 	 * @param BeginMap - begins to start storing everything and printing it.
@@ -152,7 +143,15 @@ namespace Engine3D{
 	 * */
 	static void SerializeEnttiy(YAML::Emitter& output, Entity entity){
 		output << YAML::BeginMap; // Entity
-		output << YAML::Key << "Entity" << YAML::Value << "12837192831273"; // TODO: Entity ID goes here
+
+		// assert(entity.HasComponent<EntityIDComponent>());
+		if(!entity.HasComponent<EntityIDComponent>()){
+			assert(false);
+		}
+		
+		//! @note This is where we are going to be storing our Entity UUID.
+		// output << YAML::Key << "Entity" << YAML::Value << "12837192831273"; // TODO: Entity ID goes here
+		output << YAML::Key << "Entity" << YAML::Value << entity.GetUUID(); // TODO: Entity ID goes here
 
 		if(entity.HasComponent<TagComponent>()){
 			output <<  YAML::Key << "Tag Component";
@@ -294,7 +293,8 @@ namespace Engine3D{
 
 				coreLogTrace("Deserializing entitiy with ID = {0}, name = {1}", uuid, name);
 
-				Entity deserializeEntity = _scene->createEntity(name); // @note TODO createEntity(uuid,name);
+				// Entity deserializeEntity = _scene->createEntity(name); // @note TODO createEntity(uuid,name);
+				Entity deserializeEntity = _scene->CreateEntityWithUUID(uuid, name);
 				
 				// Deserializing Transform Component.
 				auto transformComponent = entity["TransformComponent"];

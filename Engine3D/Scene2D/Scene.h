@@ -1,9 +1,8 @@
 #pragma once
-#include <Engine3D/Entt/entt.h>
 #include <Engine3D/Core/Timestep.h>
-#include <Engine3D/Renderer2D/Renderer2D.h>
 #include <Engine3D/Renderer2D/EditorCamera.h>
-
+#include <Engine3D/Scene2D/Components.h>
+#include <Engine3D/Entt/entt.h>
 
 class b2World;
 namespace Engine3D{
@@ -24,6 +23,8 @@ namespace Engine3D{
 		
 		// We should be able to create an entity into our screen.
 		Entity createEntity(const std::string& name=std::string());
+		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
+
 		void destroyEntity(Entity entity);
 
 		// Runtime start and stop

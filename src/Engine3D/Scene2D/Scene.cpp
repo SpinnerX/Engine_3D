@@ -21,7 +21,12 @@ namespace Engine3D{
 	Scene::~Scene(){}
 	
 	Entity Scene::createEntity(const std::string& name){
+		return CreateEntityWithUUID(UUID(), name);
+	}
+
+	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name){
 		Entity entity = {_registry.create(), this};
+		entity.AddComponent<EntityIDComponent>(uuid); //! @note Should just automate generating UUID's
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.tag = name.empty() ? "Entity" : name;
@@ -220,6 +225,11 @@ namespace Engine3D{
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component){
 		assert(false);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<EntityIDComponent>(Entity entity, EntityIDComponent& component){
+
 	}
 
 	template<>

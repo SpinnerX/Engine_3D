@@ -1,9 +1,7 @@
 #pragma once
 #include <Engine3D/Graphics/Camera.h>
 #include <Engine3D/Core/Timestep.h>
-#include <Engine3D/Event/Event.h>
 #include <Engine3D/Event/MouseEvent.h>
-
 #include <glm/glm.hpp>
 
 namespace Engine3D{
