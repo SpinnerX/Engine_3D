@@ -20,6 +20,8 @@ namespace Engine3D{
 	public:
 		Scene();
 		~Scene();
+
+		static Ref<Scene> Copy(Ref<Scene> other);
 		
 		// We should be able to create an entity into our screen.
 		Entity createEntity(const std::string& name=std::string());
@@ -50,7 +52,6 @@ namespace Engine3D{
 		entt::registry _registry; // entity used to determine which components belong together. registry contain the actual data.
 		uint32_t _viewportWidth=0, _viewportHeight=0;
 
-		// b2World* _physicsWorld;
 		b2World* physicsWorld = nullptr;
 
 		friend class Entity;

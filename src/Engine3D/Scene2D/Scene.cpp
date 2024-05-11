@@ -15,10 +15,66 @@ namespace Engine3D{
 		return b2_staticBody;
 	}
 
+	//! @note Used for allowing us to copy components to entities
+	//! @note Since entities may contain multiple components.
+	template<typename Component>
+	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap){
+
+		auto view = src.view<Component>();
+
+		//! @note Copying our types of components to our Entities
+		//! @note Utiizing the UUID component
+		//! @note How we communicate via UUID to add our components to our entities
+		for(auto e : view){
+			UUID uuid = src.get<EntityIDComponent>(e).id;
+			entt::entity enttID = enttMap.at(uuid);
+
+			auto& component = src.get<Component>(e);
+
+			//! @note emplace_or_replace copies/replaces a component of our entity
+			dst.emplace_or_replace<Component>(enttID, component);
+		}
+
+	}
+
 	Scene::Scene(){
 	}
 
 	Scene::~Scene(){}
+
+	Ref<Scene> Scene::Copy(Ref<Scene> other){
+		std::unordered_map<UUID, entt::entity> enttMap;
+		Ref<Scene> scene = CreateRef<Scene>();
+
+		scene->_viewportWidth = other->_viewportWidth;
+		scene->_viewportHeight = other->_viewportHeight;
+
+		auto& sourceScene = other->_registry;
+		auto& destScene = scene->_registry;
+		auto idView = sourceScene.view<EntityIDComponent>();
+
+		//! @note Creating entities to our new scene
+		for(auto e : idView){
+			//! @note Creating our new entities but will still contain same UUID's
+			UUID uuid = sourceScene.get<EntityIDComponent>(e).id;
+			const auto& name = sourceScene.get<TagComponent>(e).tag;
+			Entity newEntity = scene->CreateEntityWithUUID(uuid, name);
+			enttMap[uuid] = (entt::entity)newEntity;
+		}
+
+		//! @note Copying our components (except ID Comopnent and Tag Component)
+		/**
+		 * @note TODO --- Probably implement a better way of copying components
+		*/
+		CopyComponent<TransformComponent>(destScene, sourceScene, enttMap);
+		CopyComponent<SpriteRendererComponent>(destScene, sourceScene, enttMap);
+		CopyComponent<CameraComponent>(destScene, sourceScene, enttMap);
+		CopyComponent<NativeScriptComponent>(destScene, sourceScene, enttMap);
+		CopyComponent<RigidBody2DComponent>(destScene, sourceScene, enttMap);
+		CopyComponent<BoxCollider2DComponent>(destScene, sourceScene, enttMap);
+
+		return scene;
+	}
 	
 	Entity Scene::createEntity(const std::string& name){
 		return CreateEntityWithUUID(UUID(), name);

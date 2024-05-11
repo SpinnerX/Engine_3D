@@ -270,8 +270,8 @@ namespace Engine3D{
 		std::ifstream stream(filepath);
 		std::stringstream ss;
 		ss << stream.rdbuf();
-
 		YAML::Node data = YAML::Load(ss.str());
+
 		if(!data["Scene"]){
 			coreLogWarn("Expecting a scene for deserializer. Scene Node Required.");
 			return false;

@@ -15,7 +15,6 @@ namespace Engine3D{
 		EntityIDComponent() = default;
 		EntityIDComponent(const UUID& uid) : id(uid) {}
 		EntityIDComponent(const EntityIDComponent&) = default;
-	
 	};
 	
 	struct TagComponent{
