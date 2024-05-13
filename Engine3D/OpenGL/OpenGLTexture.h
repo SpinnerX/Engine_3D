@@ -32,13 +32,11 @@ namespace Engine3D{
 
     private:
         std::string filepath;
-        Image image;
         int width, height;
-
-        // Ref<Image> image;
+        
+        Image image;
         uint32_t id;
 		GLenum internalFormat, formatData;
-        bool isTextureLoaded = false;
     };
 
 };

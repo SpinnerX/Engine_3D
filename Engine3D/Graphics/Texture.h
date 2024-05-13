@@ -69,6 +69,8 @@ namespace Engine3D{
         uint32_t GetWidth() const;
         uint32_t GetHeight() const;
 
+        bool IsLoaded() const;
+
         void SetData(void* data, uint32_t size);
 
         uint32_t GetRendererID() const;
@@ -77,6 +79,7 @@ namespace Engine3D{
     private:
         virtual uint32_t GetWidthInternal() const = 0;
         virtual uint32_t GetHeightInternal() const = 0;
+        virtual bool IsTextureLoadedSuccessful() const = 0;
 		
 		virtual uint32_t GetRendererIDInternal() const = 0;
 

@@ -20,19 +20,32 @@ namespace Engine3D{
 	template<typename Component>
 	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap){
 
-		auto view = src.view<Component>();
+		// auto view = src.view<Component>();
 
-		//! @note Copying our types of components to our Entities
-		//! @note Utiizing the UUID component
-		//! @note How we communicate via UUID to add our components to our entities
-		for(auto e : view){
+		// //! @note Copying our types of components to our Entities
+		// //! @note Utiizing the UUID component
+		// //! @note How we communicate via UUID to add our components to our entities
+		// for(auto e : view){
+		// 	UUID uuid = src.get<EntityIDComponent>(e).id;
+
+		// 	assert((enttMap.find(uuid) != enttMap.end()));
+
+		// 	entt::entity dstEnttID = enttMap.at(uuid);
+		// 	auto& component = src.get<Component>(e);
+
+		// 	//! @note emplace_or_replace copies/replaces a component of our entity
+		// 	dst.emplace_or_replace<Component>(dstEnttID, component);
+		// 	// dst.emplace<Component>(enttID, component);
+		// 	// dst.emplace_or_replace(enttID, component);
+		// }
+		auto view = src.view<Component>();
+		for (auto e : view){
 			UUID uuid = src.get<EntityIDComponent>(e).id;
-			entt::entity enttID = enttMap.at(uuid);
+			assert(enttMap.find(uuid) != enttMap.end());
+			entt::entity dstEnttID = enttMap.at(uuid);
 
 			auto& component = src.get<Component>(e);
-
-			//! @note emplace_or_replace copies/replaces a component of our entity
-			dst.emplace_or_replace<Component>(enttID, component);
+			dst.emplace_or_replace<Component>(dstEnttID, component);
 		}
 
 	}
@@ -43,22 +56,39 @@ namespace Engine3D{
 	Scene::~Scene(){}
 
 	Ref<Scene> Scene::Copy(Ref<Scene> other){
+		// std::unordered_map<UUID, entt::entity> enttMap;
+		// Ref<Scene> newScene = CreateRef<Scene>();
+
+		// newScene->_viewportWidth = other->_viewportWidth;
+		// newScene->_viewportHeight = other->_viewportHeight;
+
+		// auto& sourceScene = other->_registry;
+		// auto& destScene = newScene->_registry;
+		// auto idView = sourceScene.view<EntityIDComponent>();
+
+		// //! @note Creating entities to our new scene
+		// for(auto e : idView){
+		// 	//! @note Creating our new entities but will still contain same UUID's
+		// 	UUID uuid = sourceScene.get<EntityIDComponent>(e).id;
+		// 	const auto& name = sourceScene.get<TagComponent>(e).tag;
+		// 	// Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
+		// 	Entity newEntity = newScene->createEntity(name);
+		// 	enttMap[uuid] = (entt::entity)newEntity;
+		// }
+
+		Ref<Scene> newScene = CreateRef<Scene>();
+		newScene->_viewportWidth = other->_viewportWidth;
+		newScene->_viewportHeight = other->_viewportHeight;
+
+		auto& srcSceneRegistry = other->_registry;
+		auto& dstSceneRegistry = newScene->_registry;
+
 		std::unordered_map<UUID, entt::entity> enttMap;
-		Ref<Scene> scene = CreateRef<Scene>();
-
-		scene->_viewportWidth = other->_viewportWidth;
-		scene->_viewportHeight = other->_viewportHeight;
-
-		auto& sourceScene = other->_registry;
-		auto& destScene = scene->_registry;
-		auto idView = sourceScene.view<EntityIDComponent>();
-
-		//! @note Creating entities to our new scene
-		for(auto e : idView){
-			//! @note Creating our new entities but will still contain same UUID's
-			UUID uuid = sourceScene.get<EntityIDComponent>(e).id;
-			const auto& name = sourceScene.get<TagComponent>(e).tag;
-			Entity newEntity = scene->CreateEntityWithUUID(uuid, name);
+		auto idView = srcSceneRegistry.view<EntityIDComponent>();
+		for (auto e : idView){
+			UUID uuid = srcSceneRegistry.get<EntityIDComponent>(e).id;
+			const auto& name = srcSceneRegistry.get<TagComponent>(e).tag;
+			Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
 			enttMap[uuid] = (entt::entity)newEntity;
 		}
 
@@ -66,14 +96,14 @@ namespace Engine3D{
 		/**
 		 * @note TODO --- Probably implement a better way of copying components
 		*/
-		CopyComponent<TransformComponent>(destScene, sourceScene, enttMap);
-		CopyComponent<SpriteRendererComponent>(destScene, sourceScene, enttMap);
-		CopyComponent<CameraComponent>(destScene, sourceScene, enttMap);
-		CopyComponent<NativeScriptComponent>(destScene, sourceScene, enttMap);
-		CopyComponent<RigidBody2DComponent>(destScene, sourceScene, enttMap);
-		CopyComponent<BoxCollider2DComponent>(destScene, sourceScene, enttMap);
+		CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<RigidBody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 
-		return scene;
+		return newScene;
 	}
 	
 	Entity Scene::createEntity(const std::string& name){
@@ -94,8 +124,8 @@ namespace Engine3D{
 		_registry.destroy(entity);
 	}
 
+	//! @note Starts our runtime physics simulation
 	void Scene::OnRuntimeStart(){
-		coreLogWarn("Starting Physics Simulation!");
 		physicsWorld = new b2World({0.0f, -9.8f});
 
 		// Going through ECS for rigit body 2D components
@@ -208,6 +238,9 @@ namespace Engine3D{
 		// Checking mainCamera exists, then if the scene does not contain camera then do not render camera.
 		if(mainCamera){
 			Renderer2D::Begin(mainCamera->getProjection(), cameraTransform);
+			
+			//! @note Drawing Sprites
+			// {
 			auto group = _registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 
 			for(auto entity : group){
@@ -216,22 +249,49 @@ namespace Engine3D{
 				Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
 			}
 
-			Renderer2D::End();
+			//! @note Drawing Circles
+			{
+			auto view = _registry.view<TransformComponent, CircleRendererComponent>();
+
+			for(auto entity : view){
+				auto[transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+				Renderer2D::DrawCircle(transform.GetTransform(), circle.color, circle.thickness, circle.fade, (int)entity);
+			// }	
+			} // End of Scope for this group of code
 			
+			}
+			
+			Renderer2D::End();
 		}
 
 	}
 	
 	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera){
 		Renderer2D::Begin(camera);
+
+		//! @note Drawing Sprites
+		{
 		auto group = _registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 
 		for(auto entity : group){
 			auto[transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
 			/* Renderer2D::DrawQuad(transform.getTransform(), sprite.color); */
-			Renderer2D::drawSprite(transform.GetTransform(), sprite, (int)entity);
+			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 		}
+		}// End of Scope for this group of code
+
+		//! @note Drawing Circles
+		{
+		auto view = _registry.view<TransformComponent, CircleRendererComponent>();
+
+		for(auto entity : view){
+			auto[transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+			Renderer2D::DrawCircle(transform.GetTransform(), circle.color, circle.thickness, circle.fade, (int)entity);
+		}	
+		} // End of Scope for this group of code
 
 		Renderer2D::End();
 		
@@ -299,6 +359,10 @@ namespace Engine3D{
 
 	template<>
 	void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component){
+	}
+
+	template<>
+	void Scene::OnComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component){
 	}
 
 	template<>

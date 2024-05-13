@@ -38,6 +38,7 @@ namespace Engine3D{
 		glm::mat4 GetTransform() const;
 	};
 
+	//! @note These rendering components enable users to set specific informations that they would like to apply to their quads
 	struct SpriteRendererComponent{
 		glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
 
@@ -47,6 +48,21 @@ namespace Engine3D{
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color) : color(color){}
+	};
+
+	struct CircleRendererComponent{
+		glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
+		float thickness = 1.0f; //! @note Setting circle thickness of filled into the circle
+		// float fade = 0.005f;
+		float fade = 1.0f;
+
+
+		Ref<Texture2D> texture; // SpriteRendererComponent will contain a way for user to allow to apply textures
+		float tilingFactor = 1.0f;
+
+		CircleRendererComponent() = default;
+		CircleRendererComponent(const CircleRendererComponent&) = default;
+		CircleRendererComponent(const glm::vec4& color) : color(color){}
 	};
 	
 	/*

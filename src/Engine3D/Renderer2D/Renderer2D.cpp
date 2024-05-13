@@ -381,6 +381,13 @@ namespace Engine3D{
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& subTexture, float tilingFactor, const glm::vec4& tintColor){
 		DrawRotatedQuad({pos.x, pos.y, 0.0f}, size, rotation, subTexture, tilingFactor, tintColor);
 	}
+
+	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID){
+		if(src.texture)
+			DrawQuad(transform, src.texture, src.tilingFactor, src.color, entityID);
+		else
+			DrawQuad(transform, src.color, entityID);
+	}
 	
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color){
 		RENDER_PROFILE_FUNCTION();
@@ -646,17 +653,13 @@ namespace Engine3D{
 
 		_data.stats.quadCount++;
 	}
-	
-	void Renderer2D::drawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID){
-		/* auto t = src.color; */
-		// @note If texture submitted for SpriteRendererComponent then we render with that texture
-		if(src.texture)
-			DrawQuad(transform, src.texture, src.tilingFactor, src.color, entityID);
-		else
-			DrawQuad(transform, src.color, entityID);
-	}
 
 	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID){
+		if(_data.quadIndexCount >= Renderer2DData::maxIndices){
+			// flushAndReset();
+			End();
+		}
+		
 		for(size_t i = 0; i < 4; i++){
 			_data.circleVertexBufferPtr->worldPosition = transform * _data.quadVertexPositions[i];
 			_data.circleVertexBufferPtr->localPosition = _data.quadVertexPositions[i] * 2.0f; // Being (-1, -1) on the left.

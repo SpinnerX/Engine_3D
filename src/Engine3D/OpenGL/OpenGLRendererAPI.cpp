@@ -26,6 +26,7 @@ namespace Engine3D{
     }
 
     void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArr, uint32_t indexCount) {
+        vertexArr->Bind();
 		uint32_t count = indexCount ? vertexArr->GetIndexBuffer()->getCount() : indexCount;
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);

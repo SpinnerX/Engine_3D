@@ -1,11 +1,12 @@
 #include <Engine3D/Engine3DPrecompiledHeader.h>
 #include <OpenGL/OpenGLTexture.h>
-// #include <Engine3D/Image/stb_image.h>
 
 namespace Engine3D{
-	OpenGLTexture2D::OpenGLTexture2D(uint32_t w, uint32_t h) : width(w), height(h), image(w, h){
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t w, uint32_t h) : image(w, h){
 		RENDER_PROFILE_FUNCTION();
         image.SetVerticalOnLoad(true);
+        width = image.GetWidth();
+        height = image.GetHeight();
 		
         // Uploading data to OpenGL texture
 		// internalData is our internalFormat
@@ -23,41 +24,13 @@ namespace Engine3D{
 
     OpenGLTexture2D::OpenGLTexture2D(const std::string& filepath) : image(filepath) {
 		RENDER_PROFILE_FUNCTION();
+
+        if(!image.IsLoaded()){
+            coreLogWarn("Could not load image to be used for creating a texture!");
+        }
+
         image.SetVerticalOnLoad(true);
 
-        // coreLogInfo("OpenGLTexture2D Create Called!");
-        // // image.SetVerticalOnLoad(true);
-        // int imageWidth, imageHeight, channels;
-
-        // stbi_set_flip_vertically_on_load(1);
-		// stbi_uc* data = nullptr;
-		// {
-		// RENDER_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
-        // // Loading in our image data
-        // data = stbi_load(filepath.c_str(), &imageWidth, &imageHeight, &channels, 0);
-		// }
-
-        // if(data == nullptr){
-        //     coreLogError("Failed to load image as the value was nullptr!");
-        //     isTextureLoaded = false;
-        //     assert(false);
-        // }
-        // else isTextureLoaded = true;
-        // // else coreLogInfo("Image Data was not nullptr meaning it was valid!");
-        // // render_core_assert(data, "Failed to load image!");
-
-        // width = imageWidth;
-        // height = imageHeight;
-
-        // Uploading data to OpenGL texture
-		// internalData is our internalFormat
-        // width = image.GetWidth(), height = image.GetHeight();
-
-        // if(!image.IsLoaded()){
-        // if(data == nullptr){
-        //     coreLogWarn("Did not load texture image!");
-        // }
-        GLenum internalData = 0, formatData = 0;
         int channels = image.GetPixelChannels();
         width = image.GetWidth();
         height = image.GetHeight();
@@ -75,10 +48,11 @@ namespace Engine3D{
             formatData = GL_RGB;
         }
 
-        // Testing textures for OpenGL
         glGenTextures(1, &id); // Equivalent to glCreateTexture (but will segfault though)
         glActiveTexture(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, id);
+
+        //! @note Works on OpenGL 4.1 or higher
 		// /* glCreateTextures(GL_TEXTURE_2D, 1, &id); */
 		// /* glTextureStorage2D(GL_TEXTURE_2D, 0, _internalFormat, _width, _height); */
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -88,9 +62,6 @@ namespace Engine3D{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		/* glTextureParameteri(id, GL_TEXTURE_WRAP_S, GL_REPEAT); */
-		/* glTextureParameteri(id, GL_TEXTURE_WRAP_T, GL_REPEAT); */
-        // glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, imageWidth, imageHeight, 0, formatData, GL_UNSIGNED_BYTE, data); // same thing as doing: glTextureSubImage2D
         glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, formatData, GL_UNSIGNED_BYTE, image.GetImageData()); // same thing as doing: glTextureSubImage2D
 
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -115,7 +86,8 @@ namespace Engine3D{
 		
 		// bytes per pixel
 		uint32_t bpp = formatData == GL_RGBA ? 4 : 3;
-		// render_core_assert(size == _width * _height * bpp, "Data must be an entire texture"); // Make sure that the textures are fine for rn
+
+        assert((size == width * height * bpp));
         glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, formatData, GL_UNSIGNED_BYTE, data); // same thing as doing: glTextureSubImage2D
 	}
 
@@ -131,6 +103,6 @@ namespace Engine3D{
         glBindTexture(GL_TEXTURE_2D, id); // Instead of using this we have to use glBindTexture on Mac
     }
 
-    bool OpenGLTexture2D::IsTextureLoadedSuccessful() const { return isTextureLoaded; }
+    bool OpenGLTexture2D::IsTextureLoadedSuccessful() const { return image.IsLoaded(); }
 
 };

@@ -90,6 +90,10 @@ add_custom_target(generate-compile-commands
 # )
 
 
+# file(COPY Resources DESTINATION ${CMAKE_BINARY_DIR})
+# file(COPY Resources DESTINATION ${CMAKE_INSTALL_PREFIX}/Engine3D)
+file(COPY Resources DESTINATION /usr/local/public/Engine3D)
+
 
 if(WIN32)
 include(cmake/win32.cmake)
