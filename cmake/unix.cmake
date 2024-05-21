@@ -57,8 +57,8 @@ endif(UNIX AND NOT APPLE)
 if(APPLE)
 target_link_libraries(
 	${PROJECT_NAME}
-	PUBLIC
 	glfw
+	${OPENGL_gl_LIBRARY}
 	"-framework Cocoa"
 	"-framework OpenGL"
 	"-framework IOKit"

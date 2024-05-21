@@ -111,7 +111,7 @@ namespace Engine3D{
 	static Renderer2DData _data; // @note Unique to this translation unit
 
 	void Renderer2D::Init(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		//! @note Quads (Squares)
 		_data.quadVertexArray = VertexArray::Create();
@@ -177,13 +177,13 @@ namespace Engine3D{
 		for(uint32_t i = 0; i < _data.maxTextureSlots; i++)
 			samplers[i] = i;
 
-		// _data.textureShader = Shader::CreateShader("assets/shaders/texture.glsl");
+		// _data.textureShader = Shader::CreateShader("Resources/shaders/texture.glsl");
 
-		// _data.textureShader = Shader::Create("/usr/local/public/GameEngine/assets/shaders/Renderer2D_Quad.glsl");
+		// _data.textureShader = Shader::Create("/usr/local/public/GameEngine/Resources/shaders/Renderer2D_Quad.glsl");
 		// _data.textureShader = Shader::Create("Resources/shaders/Renderer2D_Quad.glsl");
 		_data.textureShader = Shader::Create("/usr/local/public/Engine3D/Resources/shaders/Renderer2D_Quad.glsl");
 
-		// _data.circleTextureShader = Shader::Create("/usr/local/public/GameEngine/assets/shaders/Renderer2D_Circle.glsl");
+		// _data.circleTextureShader = Shader::Create("/usr/local/public/GameEngine/Resources/shaders/Renderer2D_Circle.glsl");
 		// _data.circleTextureShader = Shader::Create("Resources/shaders/Renderer2D_Circle.glsl");
 		// _data.circleTextureShader = Shader::Create("/usr/local/Engine3D/Resources/shaders/Renderer2D_Circle.glsl");
 		_data.circleTextureShader = Shader::Create("/usr/local/public/Engine3D/Resources/shaders/Renderer2D_Circle.glsl");
@@ -203,17 +203,19 @@ namespace Engine3D{
 	}
 
 	void Renderer2D::Shutdown(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 	}
 	
 	void Renderer2D::Begin(const Camera& camera, const glm::mat4& transform){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		glm::mat4 viewProj = camera.getProjection() * glm::inverse(transform);
 		
 		
 		_data.textureShader->Bind();
 		_data.textureShader->Set("u_ViewProjection", viewProj);
+
+		// _data.circleTextureShader->Bind();
 		
 		// _data.quadIndexCount = 0;
 		// _data.quadVertexBufferPtr = _data.quadVertexBufferBase; // Keeping track o our base memory allocations
@@ -249,7 +251,7 @@ namespace Engine3D{
 	}
 
 	void Renderer2D::Begin(const OrthographicCamera& camera){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 
 
@@ -272,7 +274,7 @@ namespace Engine3D{
 	}
 	
 	void Renderer2D::Begin(const EditorCamera& camera){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		glm::mat4 viewProj = camera.getViewProjection();
 		
@@ -291,7 +293,7 @@ namespace Engine3D{
 	}
 
 	void Renderer2D::End(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		// // if(_data.quadIndexCount){
 		// uint32_t dataSize = (uint8_t *)_data.quadVertexBufferPtr - (uint8_t *)_data.quadVertexBufferBase;
@@ -308,7 +310,7 @@ namespace Engine3D{
 	}
 
 	void Renderer2D::Flush(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		// @note Binding all of our texture slots submitted with a renderer id (that is i).
 		// @note Essentially uploading data to the GPU
@@ -390,7 +392,7 @@ namespace Engine3D{
 	}
 	
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 		
 		// To prevent overflow.
 		//! @note Once we've reached our max indices for our buffers, we need to initiate render passes
@@ -406,7 +408,7 @@ namespace Engine3D{
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
 							  * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 		
@@ -414,7 +416,7 @@ namespace Engine3D{
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float tilingFactor, const glm::vec4& tintColor){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 		// To prevent overflow.
 		if(_data.quadIndexCount >= Renderer2DData::maxIndices){
 			// flushAndReset();
@@ -460,7 +462,7 @@ namespace Engine3D{
 	}
 	
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotation, const glm::vec4& color){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 		// To prevent overflow.
 		if(_data.quadIndexCount >= Renderer2DData::maxIndices){
 			// flushAndReset();
@@ -493,7 +495,7 @@ namespace Engine3D{
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 		// To prevent overflow.
 		if(_data.quadIndexCount >= Renderer2DData::maxIndices){
 			// flushAndReset();
@@ -539,7 +541,7 @@ namespace Engine3D{
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& subTexture, float tilingFactor, const glm::vec4& tintColor){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 		// To prevent overflow.
 		if(_data.quadIndexCount >= Renderer2DData::maxIndices){
 			// flushAndReset();

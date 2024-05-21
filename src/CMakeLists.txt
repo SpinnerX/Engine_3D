@@ -99,7 +99,6 @@ set(
   ../${INCLUDE_DIR}/Core/core.h
   ../${INCLUDE_DIR}/Core/EngineLogger.h
   ../${INCLUDE_DIR}/Core/EntryPoint.h
-#   ../${INCLUDE_DIR}/Core/GameEngine.h
   ../${INCLUDE_DIR}/Event/InputPoll.h
   ../${INCLUDE_DIR}/Core/Window.h
   ../${INCLUDE_DIR}/Core/Layer.h
@@ -108,6 +107,7 @@ set(
   ../${INCLUDE_DIR}/Core/Timestep.h
   ../${INCLUDE_DIR}/Entt/entt.h
   ../${INCLUDE_DIR}/Imgui/ImGuiLayer.h
+  ../${INCLUDE_DIR}/Graphics/Camera.h
 
   ../${INCLUDE_DIR}/OpenGL/OpenGLContext.h
   ../${INCLUDE_DIR}/Graphics/Shader.h

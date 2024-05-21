@@ -4,8 +4,15 @@ set(PROJECT_NAME Sandbox)
 
 project(${PROJECT_NAME})
 
+include_directories(
+  ./
+)
+set(all_headers EditorLayer.h UI/UI.h Panels/SceneHeirarchyPanel.h)
+
+set(all_src Sandbox.cpp EditorLayer.cpp UI/UI.cpp Panels/SceneHeirarchyPanel.cpp)
+
 # Create the executable
-add_executable(${PROJECT_NAME} Sandbox.cpp)
+add_executable(${PROJECT_NAME} ${all_headers} ${all_src})
 
 # Link the static library from subproject1 using its alias sub::lib1
 # Link the header only library from subproject2 using its alias sub::lib2

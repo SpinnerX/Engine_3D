@@ -265,37 +265,37 @@ namespace Engine3D{
 
 // NOTE: May change this later on.. since this is temporary
 // NOTE: Was thinking probable have a profiler counter that is static, that'll be used for each thread ID of some sort...
-#define RENDER_PROFILE 1
+#define ENGINE_PROFILE 1
 
-#if RENDER_PROFILE
+#if ENGINE_PROFILE
 	#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC)  && (__ICC >= 600))
-		#define RENDER_FUNCTION_SIG __PRETTY_FUNCTION__
+		#define ENGINE_FUNCTION_SIG __PRETTY_FUNCTION__
 	#elif defined(__DMC__) && (__DMC__ >= 0x810)
-		#define RENDER_FUNCTION_SIG __FUNCSIG__
+		#define ENGINE_FUNCTION_SIG __FUNCSIG__
 	#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
-		#define RENDER_FUNCTION_SIG __PRETTY_FUNCTION__
+		#define ENGINE_FUNCTION_SIG __PRETTY_FUNCTION__
 	#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
-		#define RENDER_FUNCTION_SIG __FUNC__
+		#define ENGINE_FUNCTION_SIG __FUNC__
 	#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
-		#define RENDER_FUNCTION_SIG __func__ 
+		#define ENGINE_FUNCTION_SIG __func__ 
 	#elif defined(__cplusplus) && (__cplusplus >= 201103)
-		#define RENDER_FUNCTION_SIG __func__
+		#define ENGINE_FUNCTION_SIG __func__
 	#else
-		#define RENDER_FUNCTION_SIG "RENDER_FUNCTION_SIG not supported!"
+		#define ENGINE_FUNCTION_SIG "ENGINE_FUNCTION_SIG not supported!"
 #endif
 
-	#define RENDER_PROFILE_BEGIN_SESSION(name, filepath) ::Engine3D::Instrumentor::get().BeginSession(name, filepath);
-	#define RENDER_PROFILE_END_SESSION() ::Engine3D::Instrumentor::get().EndSession();
+	#define ENGINE_PROFILE_BEGIN_SESSION(name, filepath) ::Engine3D::Instrumentor::get().BeginSession(name, filepath);
+	#define ENGINE_PROFILE_END_SESSION() ::Engine3D::Instrumentor::get().EndSession();
 	
-	#define RENDER_PROFILE_SCOPE(name) ::Engine3D::InstrumentorTimer timer##__LINE__(name);
+	#define ENGINE_PROFILE_SCOPE(name) ::Engine3D::InstrumentorTimer timer##__LINE__(name);
 
 	// __FUNCSIG__ means function signature giving us the complete name of the function for uniqueness
-	#define RENDER_PROFILE_FUNCTION() RENDER_PROFILE_SCOPE(RENDER_FUNCTION_SIG)
+	#define ENGINE_PROFILE_FUNCTION() ENGINE_PROFILE_SCOPE(ENGINE_FUNCTION_SIG)
 #else
-	#define RENDER_PROFILE_BEGIN_SESSION(name, filepath)
-	#define RENDER_PROFILE_END_SESSION()
+	#define ENGINE_PROFILE_BEGIN_SESSION(name, filepath)
+	#define ENGINE_PROFILE_END_SESSION()
 	
-	#define RENDER_PROFILE_FUNCTION()
-	#define RENDER_PROFILE_SCOPE(name)
+	#define ENGINE_PROFILE_FUNCTION()
+	#define ENGINE_PROFILE_SCOPE(name)
 	
 #endif

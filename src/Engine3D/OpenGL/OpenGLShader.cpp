@@ -48,14 +48,14 @@ namespace Engine3D{
 	}
 
 	static const char* getCacheDirectory(){
-		// TODO: make sure assets directory is valid.
-		return "assets/cache/shader/opengl";
+		// TODO: make sure Resources directory is valid.
+		return "Resources/cache/shader/opengl";
 	}
 
     OpenGLShader::OpenGLShader(const std::string& filepath) : filepath(filepath){
         std::string src = readFile(filepath);
         auto shaderSrc = preProcess(src);
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		{
 
@@ -87,7 +87,7 @@ namespace Engine3D{
     }
 
     OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) : name(name){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         std::unordered_map<GLenum, std::string> sources;
         sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -100,12 +100,12 @@ namespace Engine3D{
     }
 
     OpenGLShader::~OpenGLShader(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
         glDeleteProgram(id);
     }
 
     std::string OpenGLShader::readFile(const std::string& filepath){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
         std::ifstream ins(filepath, std::ios::in | std::ios::binary);
         std::string result = "";
 
@@ -125,7 +125,7 @@ namespace Engine3D{
     }
 
     std::unordered_map<GLenum, std::string> OpenGLShader::preProcess(const std::string& src){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
         std::unordered_map<GLenum, std::string> shaderSources;
          const char* typeToken = "#type";
         size_t typeTokenLength = strlen(typeToken);
@@ -155,7 +155,7 @@ namespace Engine3D{
     }
 
     void OpenGLShader::compileOrGetVulkanBinaries(const std::unordered_map<GLenum, std::string>& sources){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
         GLint program = glCreateProgram();
 
 		std::array<GLenum, 3> shaderIDs;
@@ -234,7 +234,7 @@ namespace Engine3D{
 	void OpenGLShader::reflect(GLenum stage, const std::vector<uint32_t>& shaderData){}
 
     void OpenGLShader::bind() const {
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
         glUseProgram(id);
     }
 

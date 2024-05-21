@@ -3,7 +3,7 @@
 
 namespace Engine3D{
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t w, uint32_t h) : image(w, h){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
         image.SetVerticalOnLoad(true);
         width = image.GetWidth();
         height = image.GetHeight();
@@ -23,7 +23,7 @@ namespace Engine3D{
 	}
 
     OpenGLTexture2D::OpenGLTexture2D(const std::string& filepath) : image(filepath) {
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         if(!image.IsLoaded()){
             coreLogWarn("Could not load image to be used for creating a texture!");
@@ -70,7 +70,7 @@ namespace Engine3D{
     }
 
     OpenGLTexture2D::~OpenGLTexture2D(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         glDeleteTextures(1, &id);
     }
@@ -80,7 +80,7 @@ namespace Engine3D{
     uint32_t OpenGLTexture2D::GetHeightInternal() const { return height; }
 
 	void OpenGLTexture2D::SetDataInternal(void* data, uint32_t size){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		/* glTextureSubImage2D(id, 0, 0, 0, _width, _height, */
 		
@@ -93,7 +93,7 @@ namespace Engine3D{
 
     // Binding specific slot of this texture
     void OpenGLTexture2D::bind(GLenum slot) const {
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         /* glBindTextureUnit(slot, _rendererID); // Equivalent to glBindTexture (but will segfault though) */
 

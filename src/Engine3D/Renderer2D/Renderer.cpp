@@ -5,7 +5,7 @@ namespace Engine3D{
 	Scope<Renderer::SceneData> Renderer::_sceneData = CreateScope<Renderer::SceneData>();
 
     void Renderer::init(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         RendererCommand::init();
 		Renderer2D::Init(); // Need to initialize 2D renderer before anything.

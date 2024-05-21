@@ -6,7 +6,7 @@
 
 namespace Engine3D{
     #ifdef ENGINE_PLATFORM_WINDOWS
-        #ifdef RENDER_BUILD_DLL
+        #ifdef ENGINE_BUILD_DLL
             #define ENGINE_API __declspec(dllexport)
         #else
             #define ENGINE_API __declspec(dllimport)

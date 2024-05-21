@@ -3,8 +3,10 @@ cmake_minimum_required(VERSION 3.15)
 set(PROJECT_NAME Engine3D)
 set(CMAKE_CXX_STANDARD 20)
 
+if(APPLE)
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
+endif(APPLE)
 
 project(${PROJECT_NAME} VERSION 1.0)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -22,8 +24,8 @@ option(BUILD_SHARED_LIBS "Build Box2D as a shared library" OFF)
 
 include(GNUInstallDirs)
 include_directories(
-	${PROJECT_SOURCE_DIR}/include
-	${PROJECT_SOURCE_DIR}/include/Engine3D
+    ../
+	${PROJECT_SOURCE_DIR}/Engine3D
 )
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -31,7 +33,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 message("Message = ${CMAKE_INSTALL_PREFIX}")
 
 # add_subdirectory(Sandbox)
-add_subdirectory(Sandbox)
+# add_subdirectory(Sandbox)
 add_subdirectory(src)
 
 
@@ -39,8 +41,8 @@ add_subdirectory(src)
 # 	"$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_INSTALL_PREFIX}/include/GameEngine/GameEnginePrecompiledHeader.h>"
 # )
 
-set(PRECOMPILED_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/Engine3D/Engine3DPrecompiledHeader.h>")
-set(INSTALLED_PRECOMPILED_PATH "${CMAKE_INSTALL_PREFIX}/include/Engine3D/Engine3DPrecompiledHeader.h>")
+set(PRECOMPILED_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Engine3D/Engine3DPrecompiledHeader.h>")
+set(INSTALLED_PRECOMPILED_PATH "${CMAKE_INSTALL_PREFIX}/Engine3D/Engine3DPrecompiledHeader.h>")
 
 if(EXISTS ${INSTALLED_PRECOMPILED_PATH})
 	set(PATH ${INSTALLED_PRECOMPILED_PATH})
@@ -48,6 +50,7 @@ elseif(EXISTS ${PRECOMPILED_PATH})
 	set(PATH ${PRECOMPILED_PATH})
 endif()
 
+file(COPY Resources DESTINATION ${CMAKE_BINARY_DIR})
 
 # Before we copy compile_commands.json to .vscode
 # Making sure we should make sure if that dir already exists in the root of the projects directory
@@ -92,7 +95,7 @@ add_custom_target(generate-compile-commands
 
 # file(COPY Resources DESTINATION ${CMAKE_BINARY_DIR})
 # file(COPY Resources DESTINATION ${CMAKE_INSTALL_PREFIX}/Engine3D)
-file(COPY Resources DESTINATION /usr/local/public/Engine3D)
+# file(COPY ${CMAKE_SOURCE_DIR}/Resources DESTINATION /usr/local/public/Engine3D)
 
 
 if(WIN32)
@@ -112,6 +115,6 @@ install(
 
 # Installing to /usr/local/public/GameEngine/
 # install(
-#   DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+#   DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
 #   DESTINATION "${CMAKE_INSTALL_LIBDIR}/GameEngine"
 # )

@@ -8,7 +8,7 @@ namespace Engine3D{
 	}
 
 	void OpenGLContext::Init(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		glfwMakeContextCurrent(_window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -21,7 +21,7 @@ namespace Engine3D{
 	}
 
 	void OpenGLContext::swapBuffers(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		glfwSwapBuffers(_window);
 	}

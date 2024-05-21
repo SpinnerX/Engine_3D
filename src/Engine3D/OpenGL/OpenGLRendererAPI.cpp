@@ -4,7 +4,7 @@
 namespace Engine3D{
 
     void OpenGLRendererAPI::init() {
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         // What allows for testing
         glEnable(GL_BLEND);

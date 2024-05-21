@@ -267,7 +267,7 @@ namespace Engine3D{
 
 	}
 	
-	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera){
+	void Scene::OnUpdateEditor(EditorCamera& camera){
 		Renderer2D::Begin(camera);
 
 		//! @note Drawing Sprites

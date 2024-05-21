@@ -13,19 +13,19 @@ namespace Engine3D{
     }
 
     WindowsWindow::WindowsWindow(const WindowProps& props){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         init(props);
     }
 
     WindowsWindow::~WindowsWindow(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         shutdown();
     }
 
     void WindowsWindow::init(const WindowProps& props){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         _data.title = props.title;
         _data.width = props.width;
@@ -36,7 +36,7 @@ namespace Engine3D{
 
         // // We should check if GLFW is initialized before proceeding
         if(!_glfwInitialized){
-			RENDER_PROFILE_SCOPE("glfwInit");
+			ENGINE_PROFILE_SCOPE("glfwInit");
             // TODO: glfwTerminate on system shutfown
             // Have to specify these on macOS
             // to prevent 1200x800 from becoming 2400x1600
@@ -56,7 +56,7 @@ namespace Engine3D{
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
 		
 		{
-		RENDER_PROFILE_SCOPE("glfwCreateWindow");
+		ENGINE_PROFILE_SCOPE("glfwCreateWindow");
         _window = glfwCreateWindow((int)props.width, (int)props.height, _data.title.c_str(), nullptr, nullptr);
 		}
 
@@ -172,20 +172,20 @@ namespace Engine3D{
     }
 
     void WindowsWindow::shutdown(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         glfwDestroyWindow(_window);
     }
 
     void WindowsWindow::OnUpdate(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         glfwPollEvents();
         _context->swapBuffers(); // The SwapBuffers will handle renderers swap chains
     }
 
     void WindowsWindow::setVSync(bool enabled){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         // we are chhecking if we'd like to enable vsync.
         if(enabled){

@@ -5,7 +5,7 @@ namespace Engine3D{
     Application* Application::_instance = nullptr;
     
     Application::Application(const std::string& name, ApplicationCommandLineArgs args) : _commandLineArgs(args){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         // render_core_assert(!_instance, "Application already exists!");
         isRunning = true;
@@ -24,25 +24,25 @@ namespace Engine3D{
     }
 
     Application::~Application(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 		// Renderer::shutdown(); // Add this	
 	}
 
     void Application::pushLayer(Layer* layer){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
         _layerStack.pushLayer(layer);
         layer->OnAttach();
     }
 
     void Application::pushOverlay(Layer* layer){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
         _layerStack.pushOverlay(layer);
         layer->OnAttach();
     }
 
 
     void Application::OnEvent(Event& event){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
         EventDispatcher dispatcher(event);
         // In order for dispatcher to tell which event to execute, this is where that happens
 
@@ -69,10 +69,10 @@ namespace Engine3D{
 
 
     void Application::Run(){
-		RENDER_PROFILE_SCOPE("Runloop");
+		ENGINE_PROFILE_SCOPE("Runloop");
 
         while(isRunning){
-			RENDER_PROFILE_SCOPE("Run Mainloop");
+			ENGINE_PROFILE_SCOPE("Run Mainloop");
             // Is going to be showing how lonmg this frame current time and the last frame time
             float time = (float)glfwGetTime(); // Should be in platform::getTime() (containing impl for Mac, Windows, etc.)
             Timestep timestep = time - _lastFrameTime;
@@ -83,7 +83,7 @@ namespace Engine3D{
 			
 			if(!isMinimized){
 				{
-				RENDER_PROFILE_SCOPE("LayerStack onUpdate in run");
+				ENGINE_PROFILE_SCOPE("LayerStack onUpdate in run");
 				for(Layer* layer : _layerStack){
 				    layer->OnUpdate(timestep);
 				}
@@ -91,7 +91,7 @@ namespace Engine3D{
 
 				_imguiLayer->Begin();
 				{
-				RENDER_PROFILE_SCOPE("LayerStack onImguiRender in Application::run()");
+				ENGINE_PROFILE_SCOPE("LayerStack onImguiRender in Application::run()");
 				for(Layer* layer : _layerStack){
 				    layer->OnUIRender();
 				}
@@ -113,7 +113,7 @@ namespace Engine3D{
     }
 
 	bool Application::onWindowResize(WindowResizeEvent& e){
-			RENDER_PROFILE_FUNCTION();
+			ENGINE_PROFILE_FUNCTION();
 		if(e.GetWidth() == 0 || e.GetHeight() == 0){
 			isMinimized = true;
 			coreLogInfo("True said here!");

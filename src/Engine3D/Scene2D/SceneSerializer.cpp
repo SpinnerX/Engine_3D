@@ -357,6 +357,7 @@ namespace Engine3D{
 	}
 
 	bool SceneSerializer::deserializeRuntime(const std::string& filepath){
+		coreLogWarn("deserializeRuntime() not implemented, therefore hit assert!");
 		render_core_assert(false);
 
 		return false;

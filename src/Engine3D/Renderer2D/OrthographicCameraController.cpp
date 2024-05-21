@@ -23,7 +23,7 @@ namespace Engine3D{
 
 	// A way to control our cameras
 	void OrthographicCameraController::OnUpdate(Timestep ts){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         if(InputPoll::IsKeyPressed(ENGINE_KEY_D)){ // RIGHT
 			cameraPosition.x -= std::cos(glm::radians(cameraRotation)) * cameraTranslationSpeed * ts;
@@ -67,7 +67,7 @@ namespace Engine3D{
 	}
 
 	void OrthographicCameraController::onEvent(Event& e){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(bind(this, &OrthographicCameraController::onMouseScrolled));
@@ -86,7 +86,7 @@ namespace Engine3D{
 	
 	
 	bool OrthographicCameraController::onMouseScrolled(MouseScrolledEvent& e){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
 		zoomLevel -= e.GetYOffset() * 0.25f; // Modify thihs const offset for window resized event event
 		
@@ -96,7 +96,7 @@ namespace Engine3D{
 	}
 
 	bool OrthographicCameraController::onWindowResized(WindowResizeEvent& e){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 		this->onResize((float)e.GetWidth(), (float)e.GetHeight());
 		return false;
 	}

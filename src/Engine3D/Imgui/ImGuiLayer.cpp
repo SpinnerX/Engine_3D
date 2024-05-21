@@ -8,7 +8,7 @@ namespace Engine3D{
     ImGuiLayer::~ImGuiLayer() {}
 
     void ImGuiLayer::OnAttach(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         // IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -25,8 +25,8 @@ namespace Engine3D{
 		
 		float fontSize = 15.0f;
 		// @note Loading fonts with ImGui
-		/* std::string filename = "assets/opensans/static/OpenSans-Regular.ttf"; */
-		std::string sansTtf = "/usr/local/public/GameEngine/assets/opensans/static/OpenSans-Regular.ttf";
+		/* std::string filename = "Resources/opensans/static/OpenSans-Regular.ttf"; */
+		std::string sansTtf = "/usr/local/public/Engine3D/Resources/opensans/static/OpenSans-Regular.ttf";
 		io.Fonts->AddFontFromFileTTF(sansTtf.c_str(), fontSize);
 		io.FontDefault = io.Fonts->AddFontFromFileTTF(sansTtf.c_str(), fontSize);
 
@@ -47,7 +47,7 @@ namespace Engine3D{
     }
     
     void ImGuiLayer::OnDetach(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 		
 
 		ImGui_ImplOpenGL3_Shutdown();
@@ -56,7 +56,7 @@ namespace Engine3D{
     }
 
     void ImGuiLayer::Begin(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         ImGui_ImplGlfw_NewFrame();
         ImGui_ImplOpenGL3_NewFrame();
@@ -65,7 +65,7 @@ namespace Engine3D{
     }
 
     void ImGuiLayer::End(){
-		RENDER_PROFILE_FUNCTION();
+		ENGINE_PROFILE_FUNCTION();
 
         ImGuiIO& io = ImGui::GetIO();
 

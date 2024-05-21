@@ -42,6 +42,8 @@ namespace Engine3D{
 			return std::string();
 		}
 
+		if(outputPath == nullptr) return "";
+
 		NFD_Quit();
 
 		return outputPath;

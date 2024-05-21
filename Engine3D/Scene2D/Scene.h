@@ -38,7 +38,7 @@ namespace Engine3D{
 		// temporary
 		entt::registry& reg() { return _registry; }
 
-		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
+		void OnUpdateEditor(EditorCamera& camera);
 		void OnUpdateRuntime(Timestep ts);
 
 		void onViewportResize(uint32_t width, uint32_t height);
