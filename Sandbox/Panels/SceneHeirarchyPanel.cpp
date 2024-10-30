@@ -1,6 +1,5 @@
 #include <Engine3D/Engine3DPrecompiledHeader.h>
 #include <Engine3D/Scene2D/Components.h>
-#include <imgui/imgui.h>
 #include "SceneHeirarchyPanel.h"
 #include "UI/UI.h"
 

@@ -1,4 +1,4 @@
-#include <Engine3D/Engine3DPrecompiledHeader.h>
+/* #include <Engine3D/Engine3DPrecompiledHeader.h> */
 #include "UI.h"
 
 namespace Engine3D{

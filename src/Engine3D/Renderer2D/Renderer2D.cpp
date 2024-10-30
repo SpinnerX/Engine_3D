@@ -1,6 +1,5 @@
 #include <Engine3D/Engine3DPrecompiledHeader.h>
 #include <Engine3D/Renderer2D/Renderer2D.h>
-#include <imgui/imgui.h>
 
 namespace Engine3D{
 	/*
@@ -661,6 +660,10 @@ namespace Engine3D{
 			// flushAndReset();
 			End();
 		}
+        
+        if(_data.quadIndexCount >= Renderer2DData::maxIndices){
+            End();
+        }
 		
 		for(size_t i = 0; i < 4; i++){
 			_data.circleVertexBufferPtr->worldPosition = transform * _data.quadVertexPositions[i];

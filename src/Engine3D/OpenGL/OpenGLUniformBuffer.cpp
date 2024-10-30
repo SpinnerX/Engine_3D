@@ -6,7 +6,7 @@ namespace Engine3D{
 	OpenGLUniformBuffer::OpenGLUniformBuffer(uint32_t size, uint32_t binding){
 		glGenBuffers(1, &_rendererID);
 		glNamedBufferData(_rendererID, size, nullptr, GL_DYNAMIC_DRAW);
-		glBindBufferBase(GL_UNIFORM_BUFFER, binding, _rendererID);
+        glBindBufferBase(GL_UNIFORM_BUFFER, binding, _rendererID);
 	}
 
 	OpenGLUniformBuffer::~OpenGLUniformBuffer(){

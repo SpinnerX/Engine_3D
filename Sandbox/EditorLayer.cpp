@@ -1,16 +1,13 @@
-#include <Engine3D/Engine3DPrecompiledHeader.h>
+// #include <Engine3D/Engine3DPrecompiledHeader.h>
+// #include <Engine3D/Engine3DPrecompiledHeader.h>
 #include <Engine3D/Core/Application.h>
 #include <Engine3D/Event/KeyCodes.h>
 #include <Engine3D/Event/MouseCodes.h>
 #include <Engine3D/Renderer2D/EditorCamera.h>
 #include <Engine3D/Renderer2D/Renderer2D.h>
 #include <Engine3D/Scene2D/Components.h>
-#include <imgui/imgui.h>
 #include "EditorLayer.h"
 
-//! @note UI-related toolings
-//! @note TODO --- Internal UI Toolkit wrappers around ImGui
-//! @note Specific for Engine3D's API
 #include "UI/UI.h"
 
 
@@ -181,110 +178,110 @@ namespace Engine3D{
 
         //! @note Currently we create our widgets and we just submit the logic as a lambda
         //! @note This way we have full control of our logic, and not to worry about the boilerplate that comes with ImGui
-        UI::UI_CreatePanel("Debug Renderer", [this](){
-            std::string name = "No Entity Selected";
-            if(hoveredEdity){
-                name = hoveredEdity.GetComponent<TagComponent>().tag;
-            }
+        // UI::UI_CreatePanel("Debug Renderer", [this](){
+        //     std::string name = "No Entity Selected";
+        //     if(hoveredEdity){
+        //         name = hoveredEdity.GetComponent<TagComponent>().tag;
+        //     }
 
-            ImGui::Text("Hovered Entity: %s", name.c_str());
+        //     ImGui::Text("Hovered Entity: %s", name.c_str());
 
-            auto debugRendererSpec = Renderer2D::getStats();
+        //     auto debugRendererSpec = Renderer2D::getStats();
 
-            ImGui::Text("Renderer2D Stats");
-            ImGui::Text("Draw Calls %d", debugRendererSpec.drawCalls);
-            ImGui::Text("Quads: %d", debugRendererSpec.quadCount);
-            ImGui::Text("Vertices: %d", debugRendererSpec.getTotalVertexCount());
-            ImGui::Text("Indices: %d", debugRendererSpec.getTotalIndexCount());
-        });
+        //     ImGui::Text("Renderer2D Stats");
+        //     ImGui::Text("Draw Calls %d", debugRendererSpec.drawCalls);
+        //     ImGui::Text("Quads: %d", debugRendererSpec.quadCount);
+        //     ImGui::Text("Vertices: %d", debugRendererSpec.getTotalVertexCount());
+        //     ImGui::Text("Indices: %d", debugRendererSpec.getTotalIndexCount());
+        // });
 
-        isViewportFocused = UI::IsWindowFocused();
-        isViewportHovered = UI::IsWindowHovered();
+        // isViewportFocused = UI::IsWindowFocused();
+        // isViewportHovered = UI::IsWindowHovered();
 
-        UI::UI_CreatePanel("Viewport", [this](){
-            //! @note Used for testing our vec3 controller.
-            // glm::vec3 values(0.0f, 0.0f, 0.0f);
-            // UI::UI_DrawVec3Controller("Transform", values);
+        // UI::UI_CreatePanel("Viewport", [this](){
+        //     //! @note Used for testing our vec3 controller.
+        //     // glm::vec3 values(0.0f, 0.0f, 0.0f);
+        //     // UI::UI_DrawVec3Controller("Transform", values);
 
-            //! @note Used for testing our input text.
-            //! @note We assign a default name to our entities
-            //! @note This will be used for 
-            // Entity entity;
-            // UI::UI_InputText("##Tag", entity);
+        //     //! @note Used for testing our input text.
+        //     //! @note We assign a default name to our entities
+        //     //! @note This will be used for 
+        //     // Entity entity;
+        //     // UI::UI_InputText("##Tag", entity);
 
-            auto viewportMinReg = ImGui::GetWindowContentRegionMin();
-            auto viewportMaxReg = ImGui::GetWindowContentRegionMax();
+        //     auto viewportMinReg = ImGui::GetWindowContentRegionMin();
+        //     auto viewportMaxReg = ImGui::GetWindowContentRegionMax();
 
-            auto viewportOffset = ImGui::GetWindowPos();
+        //     auto viewportOffset = ImGui::GetWindowPos();
 
-            viewportBound[0] = {viewportMinReg.x + viewportOffset.x, viewportMinReg.y + viewportOffset.y};
-            viewportBound[1] = {viewportMaxReg.x + viewportOffset.x, viewportMaxReg.y + viewportOffset.y};
+        //     viewportBound[0] = {viewportMinReg.x + viewportOffset.x, viewportMinReg.y + viewportOffset.y};
+        //     viewportBound[1] = {viewportMaxReg.x + viewportOffset.x, viewportMaxReg.y + viewportOffset.y};
 
-            //! @note Making sure that our events do not get blocked in any sort of way
-            Application::GetImGuiLayer()->SetBlockEvents(!isViewportFocused && !isViewportHovered);
+        //     //! @note Making sure that our events do not get blocked in any sort of way
+        //     Application::GetImGuiLayer()->SetBlockEvents(!isViewportFocused && !isViewportHovered);
 
-            ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); // Should just give us the size of available panel size
-            viewportSize = {viewportSize.x, viewportSize.y};
-            // Assuming the viewPortPanelSize is this type.
-            if(viewportSize != *((glm::vec2 *)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0){
-                // Recreating the frame buffer.
-                frameBuffer->resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-                viewportSize = {viewportPanelSize.x, viewportPanelSize.y};
-            }
+        //     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail(); // Should just give us the size of available panel size
+        //     viewportSize = {viewportSize.x, viewportSize.y};
+        //     // Assuming the viewPortPanelSize is this type.
+        //     if(viewportSize != *((glm::vec2 *)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0){
+        //         // Recreating the frame buffer.
+        //         frameBuffer->resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+        //         viewportSize = {viewportPanelSize.x, viewportPanelSize.y};
+        //     }
 
-            // By passing this renderer ID, this gives us the ID of the texture that we want to render.
-            uint32_t textureID = frameBuffer->getColorAttachmentRendererID(); // Getting color buffer from frame buffer
-            ImGui::Image(reinterpret_cast<void *>(textureID), ImVec2{viewportSize.x, viewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
+        //     // By passing this renderer ID, this gives us the ID of the texture that we want to render.
+        //     uint32_t textureID = frameBuffer->getColorAttachmentRendererID(); // Getting color buffer from frame buffer
+        //     ImGui::Image(reinterpret_cast<void *>(textureID), ImVec2{viewportSize.x, viewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
 
-            //! @note UI for drawing our drag/drop targets
-            UI::UI_DragDropTarget("CONTENT_BROWSER_ITEM", [](const std::string& payloadID){
-                // const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(payloadID.c_str());
+        //     //! @note UI for drawing our drag/drop targets
+        //     UI::UI_DragDropTarget("CONTENT_BROWSER_ITEM", [](const std::string& payloadID){
+        //         // const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(payloadID.c_str());
 
-                // std::filesystem::path filepath((const char*)payload);
+        //         // std::filesystem::path filepath((const char*)payload);
 
-            });
-        });
+        //     });
+        // });
 
-        UI::UI_Toolbar("##toolbox", ImVec2(0, 2), ImVec2(0, 2), ImVec4(0, 0, 0, 0), (ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse), [this](){
+        // UI::UI_Toolbar("##toolbox", ImVec2(0, 2), ImVec2(0, 2), ImVec4(0, 0, 0, 0), (ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse), [this](){
             
-            auto& color = ImGui::GetStyle().Colors;
+        //     auto& color = ImGui::GetStyle().Colors;
 
-            auto& buttonHovered = color[ImGuiCol_ButtonHovered];
-            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+        //     auto& buttonHovered = color[ImGuiCol_ButtonHovered];
+        //     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
 
-            auto& buttonActive = color[ImGuiCol_ButtonActive];
-            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+        //     auto& buttonActive = color[ImGuiCol_ButtonActive];
+        //     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
 
-            bool toolbarEnabled = (bool)currentScene;
+        //     bool toolbarEnabled = (bool)currentScene;
 
-            ImVec4 tintColor = {1, 1, 1, 1};
+        //     ImVec4 tintColor = {1, 1, 1, 1};
 
-            if(!toolbarEnabled){
-                tintColor.w = 0.5f;
-            }
+        //     if(!toolbarEnabled){
+        //         tintColor.w = 0.5f;
+        //     }
 
-            float size = ImGui::GetWindowHeight() - 4.0f;
-            ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+        //     float size = ImGui::GetWindowHeight() - 4.0f;
+        //     ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-            ImGui::SameLine((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+        //     ImGui::SameLine((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-            //! @note Fetches icon play button image
-            Ref<Texture2D> icon = (currentSceneState == SceneState::EDIT) ? playIcon : stopIcon;
+        //     //! @note Fetches icon play button image
+        //     Ref<Texture2D> icon = (currentSceneState == SceneState::EDIT) ? playIcon : stopIcon;
 
-            if(ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2{size, size}, ImVec2(0, 0), ImVec2(1, 1))){
-                if(currentSceneState == SceneState::EDIT){
-                    OnScenePlay();
-                }
-                else if(currentSceneState == SceneState::PLAY){
-                    OnSceneEdit();
-                }
-            }
+        //     if(ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2{size, size}, ImVec2(0, 0), ImVec2(1, 1))){
+        //         if(currentSceneState == SceneState::EDIT){
+        //             OnScenePlay();
+        //         }
+        //         else if(currentSceneState == SceneState::PLAY){
+        //             OnSceneEdit();
+        //         }
+        //     }
 
-            ImGui::PopStyleVar(2);
-            ImGui::PopStyleColor(3);
-        });
+        //     ImGui::PopStyleVar(2);
+        //     ImGui::PopStyleColor(3);
+        // });
 
-        ImGui::End();
+        // ImGui::End();
     }
 
 
@@ -292,24 +289,24 @@ namespace Engine3D{
 
     //! @note Scene Serialization logic
     void EditorLayer::CreateScene(){
-        currentScene = CreateRef<Scene>();
-        currentScene->onViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
-        sceneHeirarchy.SetNewScene(currentScene);
+        // currentScene = CreateRef<Scene>();
+        // currentScene->onViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+        // sceneHeirarchy.SetNewScene(currentScene);
     }
 
     void EditorLayer::LoadScene(const std::string& path){
-        std::string filepath = FileDialogs::openFile("Engine3D (*.engine)\0*.engine");
-        if(currentSceneState == SceneState::PLAY)
-            OnSceneEdit();
+        // std::string filepath = FileDialogs::openFile("Engine3D (*.engine)\0*.engine");
+        // if(currentSceneState == SceneState::PLAY)
+        //     OnSceneEdit();
 
-        Ref<Scene> scene = CreateRef<Scene>();
-        SceneSerializer serializer(scene);
-        if(serializer.deserialize(path)){
-            editorScene = scene;
-            editorScene->onViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
-            sceneHeirarchy.SetNewScene(editorScene);
-            currentScene = editorScene;
-        }
+        // Ref<Scene> scene = CreateRef<Scene>();
+        // SceneSerializer serializer(scene);
+        // if(serializer.deserialize(path)){
+        //     editorScene = scene;
+        //     editorScene->onViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+        //     sceneHeirarchy.SetNewScene(editorScene);
+        //     currentScene = editorScene;
+        // }
     }
 
     void EditorLayer::SaveScene(){}

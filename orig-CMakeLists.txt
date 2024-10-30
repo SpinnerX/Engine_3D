@@ -1,16 +1,26 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.15)
 
-project(Engine3D VERSION 1.0)
+set(PROJECT_NAME Engine3D)
+set(CMAKE_CXX_STANDARD 20)
 
-# if(APPLE)
-# add_compile_options(-fsanitize=address)
-# add_link_options(-fsanitize=address)
-# endif(APPLE)
-set(CMAKE_CXX_STANDARD 23)
+if(APPLE)
+add_compile_options(-fsanitize=address)
+add_link_options(-fsanitize=address)
+endif(APPLE)
 
+project(${PROJECT_NAME} VERSION 1.0)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "") # works (in creating the compile_commands.json file)
 
+option(ENGINE_BUILD_UNIT_TESTS "Build the GameEngine unit tests" ON)
+option(ENGINE_BUILD_TESTBED "Build the GameEngine testbed" ON)
+option(ENGINE_BUILD_DOCS "Build the GameEngine documentation" OFF)
+option(ENGINE_USER_SETTINGS "Override GameEngine settings with GameEngineUserSettings.h" OFF)
 
+option(BUILD_SHARED_LIBS "Build Box2D as a shared library" OFF)
 
 include(GNUInstallDirs)
 include_directories(
@@ -18,9 +28,27 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Engine3D
 )
 
-add_subdirectory(src)
-add_subdirectory(Engine3D-Editor)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+message("Message = ${CMAKE_INSTALL_PREFIX}")
+
 # add_subdirectory(Sandbox)
+# add_subdirectory(Sandbox)
+add_subdirectory(src)
+
+
+# target_precompile_headers(${PROJECT_NAME} PUBLIC
+# 	"$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_INSTALL_PREFIX}/include/GameEngine/GameEnginePrecompiledHeader.h>"
+# )
+
+set(PRECOMPILED_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Engine3D/Engine3DPrecompiledHeader.h>")
+set(INSTALLED_PRECOMPILED_PATH "${CMAKE_INSTALL_PREFIX}/Engine3D/Engine3DPrecompiledHeader.h>")
+
+if(EXISTS ${INSTALLED_PRECOMPILED_PATH})
+	set(PATH ${INSTALLED_PRECOMPILED_PATH})
+elseif(EXISTS ${PRECOMPILED_PATH})
+	set(PATH ${PRECOMPILED_PATH})
+endif()
 
 file(COPY Resources DESTINATION ${CMAKE_BINARY_DIR})
 
@@ -70,27 +98,11 @@ add_custom_target(generate-compile-commands
 # file(COPY ${CMAKE_SOURCE_DIR}/Resources DESTINATION /usr/local/public/Engine3D)
 
 
-find_package(glfw3 REQUIRED)
-find_package(glad REQUIRED)
-find_package(fmt REQUIRED)
-find_package(spdlog REQUIRED)
-find_package(yaml-cpp REQUIRED)
-find_package(box2d REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(imguidocking REQUIRED)
-find_package(ImGuizmo REQUIRED)
-
-target_link_libraries(
-    ${PROJECT_NAME} PRIVATE
-    glfw
-    glad::glad
-    fmt::fmt
-    spdlog::spdlog
-    yaml-cpp::yaml-cpp
-    box2d::box2d
-    imguidocking::imguidocking
-    imguizmo::imguizmo
-)
+# if(WIN32)
+# include(cmake/win32.cmake)
+# elseif(UNIX)
+# include(cmake/unix.cmake)
+# endif()
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC
 	"$<$<COMPILE_LANGUAGE:CXX>:>"
@@ -100,3 +112,9 @@ install(
 	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Engine3D"
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
+
+# Installing to /usr/local/public/GameEngine/
+# install(
+#   DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+#   DESTINATION "${CMAKE_INSTALL_LIBDIR}/GameEngine"
+# )
