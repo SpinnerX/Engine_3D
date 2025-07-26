@@ -53,6 +53,7 @@ namespace Engine3D{
 		uint32_t _viewportWidth=0, _viewportHeight=0;
 
 		b2World* physicsWorld = nullptr;
+		// b2WorldDef* physicsWorld = nullptr;
 
 		friend class Entity;
 		friend class SceneSerializer;

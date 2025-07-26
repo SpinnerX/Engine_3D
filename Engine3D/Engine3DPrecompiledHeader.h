@@ -32,9 +32,14 @@
 
 #include <fmt/ostream.h>
 
-#include <imgui/imgui.h>
-#include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui.h>
+// #include <imgui.h>
+// #include <imgui/backends/imgui_impl_opengl3.h>
+// #include <imgui/backends/imgui_impl_glfw.h>
+#include <imgui.h>
 #include <imgui/backends/imgui_impl_glfw.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+// #include <imgui/backends/imgui_impl_vulkan.h>
 #include <ImGuizmo/ImGuizmo.h>
 
 #include <glm/glm.hpp>
@@ -84,11 +89,22 @@
 
 //! @note Physics-related includes
 // @note box2D related includes
+// #include <box2d/box2d.h>
+// #include <box2d/b2_body.h>
+// #include <box2d/b2_fixture.h>
+// #include <box2d/b2_polygon_shape.h>
+// #include "box2d/base.h"
+// #include "box2d/box2d.h"
+// #include "box2d/collision.h"
+// #include "box2d/id.h"
+// #include "box2d/math_functions.h"
+// #include "box2d/types.h"
+// #include <yaml-cpp/yaml.h>
+
 #include <box2d/box2d.h>
 #include <box2d/b2_body.h>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_polygon_shape.h>
-#include <yaml-cpp/yaml.h>
 
 // #include <glm/glm.hpp>
 // #include <Engine3D/Event/ApplicationEvent.h>

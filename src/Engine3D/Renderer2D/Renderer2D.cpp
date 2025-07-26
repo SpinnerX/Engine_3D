@@ -1,6 +1,6 @@
 #include <Engine3D/Engine3DPrecompiledHeader.h>
 #include <Engine3D/Renderer2D/Renderer2D.h>
-#include <imgui/imgui.h>
+#include <imgui.h>
 
 namespace Engine3D{
 	/*
@@ -181,12 +181,12 @@ namespace Engine3D{
 
 		// _data.textureShader = Shader::Create("/usr/local/public/GameEngine/Resources/shaders/Renderer2D_Quad.glsl");
 		// _data.textureShader = Shader::Create("Resources/shaders/Renderer2D_Quad.glsl");
-		_data.textureShader = Shader::Create("/usr/local/public/Engine3D/Resources/shaders/Renderer2D_Quad.glsl");
+		_data.textureShader = Shader::Create("Resources/shaders/Renderer2D_Quad.glsl");
 
 		// _data.circleTextureShader = Shader::Create("/usr/local/public/GameEngine/Resources/shaders/Renderer2D_Circle.glsl");
 		// _data.circleTextureShader = Shader::Create("Resources/shaders/Renderer2D_Circle.glsl");
 		// _data.circleTextureShader = Shader::Create("/usr/local/Engine3D/Resources/shaders/Renderer2D_Circle.glsl");
-		_data.circleTextureShader = Shader::Create("/usr/local/public/Engine3D/Resources/shaders/Renderer2D_Circle.glsl");
+		_data.circleTextureShader = Shader::Create("Resources/shaders/Renderer2D_Circle.glsl");
 
 		_data.textureShader->Bind();
 		_data.textureShader->Set("u_Textures", samplers, _data.maxTextureSlots);

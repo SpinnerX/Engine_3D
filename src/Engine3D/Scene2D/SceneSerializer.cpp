@@ -1,6 +1,7 @@
 #include <Engine3D/Engine3DPrecompiledHeader.h>
 #include <Engine3D/Scene2D/SceneSerializer.h>
 #include <fstream>
+#include <yaml-cpp/yaml.h>
 
 namespace YAML{
 	/*

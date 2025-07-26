@@ -5,7 +5,7 @@
 #include <Engine3D/Renderer2D/EditorCamera.h>
 #include <Engine3D/Renderer2D/Renderer2D.h>
 #include <Engine3D/Scene2D/Components.h>
-#include <imgui/imgui.h>
+#include <imgui.h>
 #include "EditorLayer.h"
 
 //! @note UI-related toolings

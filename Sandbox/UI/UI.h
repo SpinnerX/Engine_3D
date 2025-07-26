@@ -1,7 +1,7 @@
 #pragma once
 #include <Engine3D/Core/core.h>
 #include <Engine3D/Scene2D/Components.h>
-#include <imgui/imgui.h>
+#include <imgui.h>
 #include <imgui/imgui_internal.h>
 #include <string>
 #include <glm/glm.hpp>
